@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "63337842799",
+    "project_id": "stroop-1987e",
+    "storage_bucket": "stroop-1987e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63337842799:android:c86de25767a449597ae59a",
+        "android_client_info": {
+          "package_name": "com.example.stroop_effect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwaNpW7B-XW8FSNrHC58apGG0IuqOqITk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
