@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:stroop_effect/pages/home.dart';
 import 'authentication/auth.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 3), // Start from bottom
-      end: const Offset(0, 0),   // End at original position
+      end: const Offset(0, -7.5),   // End at original position
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.bounceIn,
@@ -35,11 +36,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     Timer(
       const Duration(seconds: 4),
           () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) =>  AuthPage()),
-        );
-      },
+
+              Navigator.pushReplacement(
+                context!,
+                MaterialPageRoute(builder: (context) => AuthPage()),
+              );
+
+          },
     );
   }
 
@@ -65,14 +68,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-            ),
-            SlideTransition(
-              position: _slideAnimation,
-              child: const Icon(
-                Icons.border_color_outlined,
-                size: 100,
-                color: Colors.pink,
               ),
             ),
           ],

@@ -69,6 +69,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -84,11 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Icon(
-                  Icons.border_color_outlined,
-                  size: 100,
-                  color: Colors.pink,
-                ),
 
                 const SizedBox(height: 50),
                 const Text(
@@ -101,7 +98,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25),
                 // email textfield
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth > 600 ? 1100 : 25,
+                  ),
                   child: TextField(
                     controller: emailController,
                     obscureText: false,
@@ -124,7 +123,9 @@ class _LoginPageState extends State<LoginPage> {
 
                 // password textfield
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth > 600 ? 1100 : 25,
+                  ),
                   child: TextField(
                     controller: passwordController,
                     obscureText: true,
@@ -150,8 +151,10 @@ class _LoginPageState extends State<LoginPage> {
                 GestureDetector(
                   onTap: signUserIn,
                   child: Container(
-                    padding: const EdgeInsets.all(25),
-                    margin: const EdgeInsets.symmetric(horizontal: 25),
+                    padding: EdgeInsets.all(25),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth > 600 ? 1100 : 25,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.pink,
                       borderRadius: BorderRadius.circular(8),
