@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'game.dart';
+
 class ResultPage extends StatelessWidget {
-  final int timeTaken;
+  final double timeTaken;
   final int correctAnswers;
   final int incorrectAnswers;
   final int correctAnswers2;
@@ -27,6 +29,17 @@ class ResultPage extends StatelessWidget {
             Text(
               'Incorrect answers: $incorrectAnswers',
               style: Theme.of(context).textTheme.headline6,
+            ),
+            SizedBox(height: 16), // Add some spacing
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the Game page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => GamePage()), // Replace with your actual Game page
+                );
+              },
+              child: Text('Continue to second language'),
             ),
           ],
         ),

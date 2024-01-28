@@ -25,9 +25,9 @@ class _GamePageState extends State<GamePage> {
     Colors.yellow,
     Colors.red
   ];
-  late String currentWord;
+  late String currentWord = '';
   late Color currentColor;
-  late Color wordColor;
+  late Color wordColor = Colors.transparent;
   int wordCount = 0;
   bool isCroatian = Random().nextBool();
   int correctAnswers = 0;
@@ -40,10 +40,10 @@ class _GamePageState extends State<GamePage> {
 
   void nextWord() {
     setState(() {
-      currentWord = words[Random().nextInt(4) + (isCroatian ? 0 : 4)];
+      currentWord = isCroatian ? words[Random().nextInt(4)] : words[Random().nextInt(4) + 4];
       wordColor = colors[Random().nextInt(4)];
       wordCount++;
-      if (wordCount == 10) {
+      if (wordCount == 11) {
         if (isCroatian) {
           croatianCorrectAnswers += correctAnswers;
           croatianIncorrectAnswers += incorrectAnswers;
@@ -60,9 +60,8 @@ class _GamePageState extends State<GamePage> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Language Change'),
-              content: Text('The language has changed to ${isCroatian
-                  ? 'Croatian'
-                  : 'English'}.'),
+              content: Text(
+                  'The language has changed to ${isCroatian ? 'Croatian' : 'English'}.'),
               actions: [
                 TextButton(
                   child: Text('OK'),
@@ -82,21 +81,15 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    nextWord();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (currentWord == null && currentColor == null) {
+    Future.delayed(Duration.zero, () {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Game Start'),
-            content: Text('The game will start in ${isCroatian
-                ? 'Croatian'
-                : 'English'}.'),
+            content: Text(
+              'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
+            ),
             actions: [
               TextButton(
                 child: Text('OK'),
@@ -109,7 +102,12 @@ class _GamePageState extends State<GamePage> {
           );
         },
       );
-    }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -150,29 +148,36 @@ class _GamePageState extends State<GamePage> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: colors.take(2).map((color) =>
-                      Expanded(
-                        child: TextButton(
-                          style: TextButton.styleFrom(backgroundColor: color),
-                          onPressed: () {
-                            _handleAnswer(color);
-                          },
-                          child: Container(height: 70),
-                        ),
-                      )).toList(),
+                  children: colors
+                      .take(2)
+                      .map((color) => Expanded(
+                            child: TextButton(
+                              style:
+                                  TextButton.styleFrom(backgroundColor: color),
+                              onPressed: () {
+                                _handleAnswer(color);
+                              },
+                              child: Container(height: 70),
+                            ),
+                          ))
+                      .toList(),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: colors.skip(2).take(2).map((color) =>
-                      Expanded(
-                        child: TextButton(
-                          style: TextButton.styleFrom(backgroundColor: color),
-                          onPressed: () {
-                            _handleAnswer(color);
-                          },
-                          child: Container(height: 70),
-                        ),
-                      )).toList(),
+                  children: colors
+                      .skip(2)
+                      .take(2)
+                      .map((color) => Expanded(
+                            child: TextButton(
+                              style:
+                                  TextButton.styleFrom(backgroundColor: color),
+                              onPressed: () {
+                                _handleAnswer(color);
+                              },
+                              child: Container(height: 70),
+                            ),
+                          ))
+                      .toList(),
                 ),
               ],
             ),
@@ -184,7 +189,14 @@ class _GamePageState extends State<GamePage> {
 
   void _handleAnswer(Color selectedColor) {
     setState(() {
-      if (selectedColor == wordColor) {
+      Color expectedColor = Colors.transparent; // Default value
+      int wordIndex = words.indexOf(currentWord);
+
+      if (wordIndex >= 0 && wordIndex < colors.length) {
+        expectedColor = colors[wordIndex];
+      }
+
+      if (selectedColor == expectedColor) {
         correctAnswers++;
       } else {
         incorrectAnswers++;
@@ -192,16 +204,20 @@ class _GamePageState extends State<GamePage> {
       nextWord();
       if (wordCount == 0) {
         // Calculate the time taken
-        int timeTaken = DateTime.now().difference(startTime).inSeconds;
-        // Check if both languages have been processed
+        double timeTaken = (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
         if ((isCroatian && wordCount == 0) || (!isCroatian && wordCount == 0)) {
           // Navigate to the result page
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>
-                ResultPage(timeTaken,
-                    croatianCorrectAnswers,englishCorrectAnswers,
-                    croatianIncorrectAnswers,englishIncorrectAnswers)),
+            MaterialPageRoute(
+              builder: (context) => ResultPage(
+                timeTaken,
+                croatianCorrectAnswers,
+                croatianIncorrectAnswers,
+                englishCorrectAnswers,
+                englishIncorrectAnswers,
+              ),
+            ),
           );
         }
       }
