@@ -23,11 +23,19 @@ class ResultPage extends StatelessWidget {
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              'Correct answers: $correctAnswers',
+              'Correct answers croatian: $correctAnswers',
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              'Incorrect answers: $incorrectAnswers',
+              'Incorrect answers croatian: $incorrectAnswers',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            Text(
+              'Correct answers english: $correctAnswers2',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            Text(
+              'Incorrect answers english: $incorrectAnswers2',
               style: Theme.of(context).textTheme.headline6,
             ),
             SizedBox(height: 16), // Add some spacing

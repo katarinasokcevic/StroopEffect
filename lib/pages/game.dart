@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stroop_effect/pages/result.dart';
 
 class GamePage extends StatefulWidget {
@@ -9,25 +9,22 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  final List<String> words = [
-    'zelena',
-    'plava',
-    'žuta',
-    'crvena',
-    'green',
-    'blue',
-    'yellow',
-    'red'
-  ];
-  final List<Color> colors = [
-    Colors.green,
-    Colors.blue,
-    Colors.yellow,
-    Colors.red
-  ];
+  final Map<String, Color> wordColorMap = {
+    'zelena': Colors.green,
+    'plava': Colors.blue,
+    'žuta': Colors.yellow,
+    'crvena': Colors.red,
+    'green': Colors.green,
+    'blue': Colors.blue,
+    'yellow': Colors.yellow,
+    'red': Colors.red
+  };
+
   late String currentWord = '';
   late Color currentColor;
   late Color wordColor = Colors.transparent;
+  List<String> words = [];
+  List<Color> colors = [];
   int wordCount = 0;
   bool isCroatian = Random().nextBool();
   int correctAnswers = 0;
@@ -38,49 +35,12 @@ class _GamePageState extends State<GamePage> {
   int englishIncorrectAnswers = 0;
   DateTime startTime = DateTime.now();
 
-  void nextWord() {
-    setState(() {
-      currentWord = isCroatian ? words[Random().nextInt(4)] : words[Random().nextInt(4) + 4];
-      wordColor = colors[Random().nextInt(4)];
-      wordCount++;
-      if (wordCount == 11) {
-        if (isCroatian) {
-          croatianCorrectAnswers += correctAnswers;
-          croatianIncorrectAnswers += incorrectAnswers;
-        } else {
-          englishCorrectAnswers += correctAnswers;
-          englishIncorrectAnswers += incorrectAnswers;
-        }
-        isCroatian = !isCroatian;
-        wordCount = 0;
-        correctAnswers = 0;
-        incorrectAnswers = 0;
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Language Change'),
-              content: Text(
-                  'The language has changed to ${isCroatian ? 'Croatian' : 'English'}.'),
-              actions: [
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    nextWord();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
+    words = wordColorMap.keys.toList();
+    colors = wordColorMap.values.toList();
+    _loadLanguage();
     Future.delayed(Duration.zero, () {
       showDialog(
         context: context,
@@ -104,6 +64,7 @@ class _GamePageState extends State<GamePage> {
       );
     });
   }
+
 
   @override
   void didChangeDependencies() {
@@ -187,14 +148,30 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  void nextWord() {
+    setState(() {
+      currentWord = isCroatian ? words[Random().nextInt(4)] : words[Random().nextInt(4) + 4];
+      wordColor = wordColorMap.values.elementAt(Random().nextInt(4));
+      wordCount++;
+      if (wordCount == 11) {
+        if (isCroatian) {
+          croatianCorrectAnswers += correctAnswers;
+          croatianIncorrectAnswers += incorrectAnswers;
+        } else {
+          englishCorrectAnswers += correctAnswers;
+          englishIncorrectAnswers += incorrectAnswers;
+        }
+        isCroatian = !isCroatian;
+        wordCount = 0;
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+      }
+    });
+  }
+
   void _handleAnswer(Color selectedColor) {
     setState(() {
-      Color expectedColor = Colors.transparent; // Default value
-      int wordIndex = words.indexOf(currentWord);
-
-      if (wordIndex >= 0 && wordIndex < colors.length) {
-        expectedColor = colors[wordIndex];
-      }
+      Color? expectedColor = wordColorMap[currentWord]; // Use the map to get the color
 
       if (selectedColor == expectedColor) {
         correctAnswers++;
@@ -204,7 +181,8 @@ class _GamePageState extends State<GamePage> {
       nextWord();
       if (wordCount == 0) {
         // Calculate the time taken
-        double timeTaken = (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
+        double timeTaken =
+            (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
         if ((isCroatian && wordCount == 0) || (!isCroatian && wordCount == 0)) {
           // Navigate to the result page
           Navigator.push(
@@ -220,8 +198,22 @@ class _GamePageState extends State<GamePage> {
             ),
           );
         }
+        _saveLanguage(isCroatian);
       }
     });
   }
+
+  Future<void> _loadLanguage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isCroatian = prefs.getBool('isCroatian') ?? true;
+    });
+  }
+
+  Future<void> _saveLanguage(bool isCroatian) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isCroatian', isCroatian);
+  }
+
 
 }
