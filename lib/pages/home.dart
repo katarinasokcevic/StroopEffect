@@ -47,25 +47,26 @@ class _HomePageState extends State<HomePage> {
               // Replace with the correct path to your image
               height: 200, // Set the desired height for the image
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth > 600 ? 700 : 25,
-                vertical: 10,
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 10,
                 ),
-                child: const Text(
-                  "Our Flutter application delves into the phenomenon known as the Stroop effect, an intriguing cognitive occurrence involving the interplay of colors and words in the brain.\n"
-                  "Objective is to observe user interactions, garner insights into cognitive processes, and contribute to a comprehensive understanding of cross-cultural influences on the Stroop effect.\n"
-                  "All acquired data will be meticulously documented and disseminated, aiming \n to enrich the collective understanding of cognitive phenomena.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 23,
-                    color: Colors.black,
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text(
+                    "Our Flutter application delves into the phenomenon known as the Stroop effect, an intriguing cognitive occurrence involving the interplay of colors and words in the brain.\n"
+                    "Objective is to observe user interactions, garner insights into cognitive processes, and contribute to a comprehensive understanding of cross-cultural influences on the Stroop effect.\n"
+                    "All acquired data will be meticulously documented and disseminated, aiming \n to enrich the collective understanding of cognitive phenomena.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 23,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),

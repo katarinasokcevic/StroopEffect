@@ -6,10 +6,10 @@ class ResultPage extends StatelessWidget {
   final double timeTaken;
   final int correctAnswers;
   final int incorrectAnswers;
-  final int correctAnswers2;
-  final int incorrectAnswers2;
+  final bool language;
 
-  ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,this.correctAnswers2, this.incorrectAnswers2);
+
+  ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,this.language);
 
   @override
   Widget build(BuildContext context) {
@@ -19,25 +19,22 @@ class ResultPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
+              'Language: ${language == 1 ? 'Croatian' : 'English'}',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            Text(
               'Time taken: $timeTaken seconds',
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              'Correct answers croatian: $correctAnswers',
+              'Correct answers: $correctAnswers',
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(
-              'Incorrect answers croatian: $incorrectAnswers',
+              'Incorrect answers: $incorrectAnswers',
               style: Theme.of(context).textTheme.headline6,
             ),
-            Text(
-              'Correct answers english: $correctAnswers2',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            Text(
-              'Incorrect answers english: $incorrectAnswers2',
-              style: Theme.of(context).textTheme.headline6,
-            ),
+
             SizedBox(height: 16), // Add some spacing
             ElevatedButton(
               onPressed: () {

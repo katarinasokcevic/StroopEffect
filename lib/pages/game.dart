@@ -161,10 +161,7 @@ class _GamePageState extends State<GamePage> {
           englishCorrectAnswers += correctAnswers;
           englishIncorrectAnswers += incorrectAnswers;
         }
-        isCroatian = !isCroatian;
         wordCount = 0;
-        correctAnswers = 0;
-        incorrectAnswers = 0;
       }
     });
   }
@@ -180,27 +177,35 @@ class _GamePageState extends State<GamePage> {
       }
       nextWord();
       if (wordCount == 0) {
-        // Calculate the time taken
-        double timeTaken =
-            (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
-        if ((isCroatian && wordCount == 0) || (!isCroatian && wordCount == 0)) {
-          // Navigate to the result page
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ResultPage(
-                timeTaken,
-                croatianCorrectAnswers,
-                croatianIncorrectAnswers,
-                englishCorrectAnswers,
-                englishIncorrectAnswers,
-              ),
-            ),
-          );
-        }
-        _saveLanguage(isCroatian);
+        isCroatian = !isCroatian;
+        navigateToResultPage();
       }
     });
+  }
+
+  void navigateToResultPage() {
+    // Calculate the time taken
+    double timeTaken = (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
+    print(' $isCroatian');
+    isCroatian = !isCroatian;
+    int correctAnswersToPass = isCroatian ? croatianCorrectAnswers : englishCorrectAnswers;
+    int incorrectAnswersToPass = isCroatian ? croatianIncorrectAnswers : englishIncorrectAnswers;
+    print('nakon $isCroatian');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultPage(
+          timeTaken,
+          correctAnswersToPass,
+          incorrectAnswersToPass,
+          isCroatian,
+        ),
+      ),
+    );
+    isCroatian = !isCroatian;
+    _saveLanguage(isCroatian);
+    correctAnswers = 0;
+    incorrectAnswers = 0;
   }
 
   Future<void> _loadLanguage() async {
