@@ -24,8 +24,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 3), // Start from bottom
-      end: const Offset(0, -7.5),   // End at original position
+      begin: const Offset(0, 3),
+      end: const Offset(0, -7.5),
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.bounceIn,

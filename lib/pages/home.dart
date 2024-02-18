@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'authentication/auth.dart';
 import 'game.dart';
 
@@ -17,7 +16,6 @@ class _HomePageState extends State<HomePage> {
 
   final user = FirebaseAuth.instance.currentUser!;
 
-  // sign user out method
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
@@ -47,8 +45,8 @@ class _HomePageState extends State<HomePage> {
             ),
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 10,
+                padding: const EdgeInsets.symmetric(
+                  vertical:  10,
                 ),
                 child: Container(
                   padding: const EdgeInsets.all(16.0),
@@ -56,93 +54,40 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Text(
-                    "Our Flutter application delves into the phenomenon known as the Stroop effect, an intriguing cognitive occurrence involving the interplay of colors and words in the brain.\n"
-                    "Objective is to observe user interactions, garner insights into cognitive processes, and contribute to a comprehensive understanding of cross-cultural influences on the Stroop effect.\n"
-                    "All acquired data will be meticulously documented and disseminated, aiming \n to enrich the collective understanding of cognitive phenomena.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: Colors.black,
-                    ),
+                  child: LayoutBuilder(
+                    builder: (BuildContext context, BoxConstraints constraints) {
+                      bool isMobile = constraints.maxWidth >  600;
+                      double fontSize = isMobile ?  23 :  16; // Example values
+
+                      return Text(
+                        "This application delves into the phenomenon known as the Stroop effect, an intriguing cognitive occurrence involving the interplay of colors and words in the brain.\n"
+                            "Objective is to observe user interactions, garner insights into cognitive processes, and contribute to a comprehensive understanding of cross-cultural influences on the Stroop effect.\n"
+                            "All acquired data will be meticulously documented and disseminated, aiming \n to enrich the collective understanding of cognitive phenomena.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: fontSize,
+                          color: Colors.black,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
                   if (user == null) {
-                    // User is not signed in, navigate to AuthPage
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => AuthPage()),
                     );
                   } else {
-                    // User is signed in, show the game rules
                     showDialog(
                       context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text(
-                            "Game Rules",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          content: RichText(
-                            textAlign: TextAlign.center,
-                            text: const TextSpan(
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text:
-                                      "The rules of the Stroop effect are very simple. Click on the rectangle with a color which represents meaning of the word, not the color of written word.\n"
-                                      "For example, for the word, ",
-                                ),
-                                TextSpan(
-                                  text: "RED",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      ", you should click on red rectangle.\n\n"
-                                      "The words are written in Croatian and English, and there will be a total of 10 words per language. \n The order may vary to ensure unbiased research.",
-                                ),
-                              ],
-                            ),
-                          ),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context); // Close the AlertDialog
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => GamePage()),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.pink),
-                              child: const Text(
-                                "Start",
-                                style: TextStyle(
-                                  fontSize: 30
-                                  ,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                      builder: (context) => buildDialog(context),
                     );
                   }
                 },
@@ -164,6 +109,64 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        "Game Rules",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: RichText(
+        textAlign: TextAlign.center,
+        text: const TextSpan(
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+          children: [
+            TextSpan(
+              text:
+              "The rules of the Stroop effect are very simple. Click on the rectangle with a color which represents meaning of the word, not the color of written word.\n"
+                  "For example, for the word, ",
+            ),
+            TextSpan(
+              text: "RED",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text:
+              ", you should click on red rectangle.\n\n"
+                  "The words are written in Croatian and English, and there will be a total of 10 words per language. \n The order may vary to ensure unbiased research.",
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context); // Close the AlertDialog
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GamePage()),
+            );
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
+          child: const Text(
+            "Start",
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

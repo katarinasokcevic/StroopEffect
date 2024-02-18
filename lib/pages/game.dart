@@ -22,17 +22,18 @@ class _GamePageState extends State<GamePage> {
 
   late String currentWord = '';
   late Color currentColor;
+  late bool isCroatian;
   late Color wordColor = Colors.transparent;
   List<String> words = [];
   List<Color> colors = [];
   int wordCount = 0;
-  bool isCroatian = Random().nextBool();
   int correctAnswers = 0;
   int incorrectAnswers = 0;
   int croatianCorrectAnswers = 0;
   int croatianIncorrectAnswers = 0;
   int englishCorrectAnswers = 0;
   int englishIncorrectAnswers = 0;
+  bool bothLanguagesPlayed = false;
   DateTime startTime = DateTime.now();
 
   @override
@@ -40,9 +41,7 @@ class _GamePageState extends State<GamePage> {
     super.initState();
     words = wordColorMap.keys.toList();
     colors = wordColorMap.values.toList();
-    print("jezik je $isCroatian");
     _loadLanguage().then((_) {
-      // After the language has been loaded, show the dialog
       _showGameStartDialog();
     });
   }
@@ -69,8 +68,6 @@ class _GamePageState extends State<GamePage> {
       },
     );
   }
-
-
 
   @override
   void didChangeDependencies() {
@@ -174,7 +171,7 @@ class _GamePageState extends State<GamePage> {
 
   void _handleAnswer(Color selectedColor) {
     setState(() {
-      Color? expectedColor = wordColorMap[currentWord]; // Use the map to get the color
+      Color? expectedColor = wordColorMap[currentWord];
 
       if (selectedColor == expectedColor) {
         correctAnswers++;
@@ -183,20 +180,21 @@ class _GamePageState extends State<GamePage> {
       }
       nextWord();
       if (wordCount ==  0) {
-        navigateToResultPage(); // Navigate to the result page immediately after the round ends
+        navigateToResultPage();
       }
     });
   }
 
-  void navigateToResultPage() {
-    // Calculate the time taken
+  Future<void> navigateToResultPage() async {
     double timeTaken = (DateTime.now().difference(startTime).inMilliseconds) /  1000.0;
     int correctAnswersToPass = isCroatian ? correctAnswers : incorrectAnswers;
     int incorrectAnswersToPass = isCroatian ? incorrectAnswers : correctAnswers;
-    isCroatian = !isCroatian;
-    _saveLanguage(isCroatian);
     correctAnswers =  0;
     incorrectAnswers =  0;
+
+    isCroatian = !isCroatian;
+    _saveLanguage(isCroatian);
+    bool bothLanguagesPlayed = !isCroatian;
 
     Navigator.push(
       context,
@@ -206,20 +204,25 @@ class _GamePageState extends State<GamePage> {
           correctAnswersToPass,
           incorrectAnswersToPass,
           isCroatian,
+          bothLanguagesPlayed,
         ),
       ),
     );
   }
 
-
   Future<void> _loadLanguage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
+    bool? isCroatian = prefs.getBool('isCroatian');
+
+    if (isCroatian == null) {
       isCroatian = Random().nextBool();
+      await _saveLanguage(isCroatian);
+    }
+    setState(() {
+      this.isCroatian = isCroatian!;
     });
-    print("nakon toga spremljen jezik je $isCroatian");
-    _saveLanguage(isCroatian);
   }
+
 
   Future<void> _saveLanguage(bool isCroatian) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

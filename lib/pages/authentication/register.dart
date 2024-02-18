@@ -12,14 +12,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  // sign user in method
   void signUserUp() async {
-    // show loading circle
     showDialog(
       context: context,
       builder: (context) {
@@ -29,7 +26,6 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
 
-    // try creating the user
     try {
       if(passwordController.text == confirmPasswordController.text ) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -38,16 +34,13 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       }
       else {
-        // show error message
         showErrorMessage("Passwords don't match");
       }
 
-      // Pop the loading circle
       if (context.mounted) {
         Navigator.pop(context);
       }
     } on FirebaseAuthException catch (e) {
-      // Pop the loading circle
       if (context.mounted) {
         Navigator.pop(context);
       }
@@ -55,7 +48,6 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  // error message to user
   void showErrorMessage(String message) {
     showDialog(
       context: context,
@@ -101,7 +93,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
 
                 const SizedBox(height: 25),
-                // email textfield
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth > 600 ? 1100 : 25,
@@ -126,7 +117,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // password textfield
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth > 600 ? 1100 : 25,
@@ -151,7 +141,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // confirm password textfield
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth > 600 ? 1100 : 25,
@@ -176,7 +165,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // sign in button
                 GestureDetector(
                   onTap: signUserUp,
                   child: Container(
@@ -203,7 +191,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 80),
 
-                // or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -218,7 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
 
-                // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
