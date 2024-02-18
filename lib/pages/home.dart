@@ -43,8 +43,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Image.asset(
               '../assets/logo.png',
-              // Replace with the correct path to your image
-              height: 200, // Set the desired height for the image
+              height: 200,
             ),
             Center(
               child: Padding(

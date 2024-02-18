@@ -19,7 +19,7 @@ class ResultPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Language: ${language == 1 ? 'Croatian' : 'English'}',
+              'Language: ${language ? 'English' : 'Croatian'}',
               style: Theme.of(context).textTheme.headline6,
             ),
             Text(

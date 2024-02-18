@@ -40,30 +40,36 @@ class _GamePageState extends State<GamePage> {
     super.initState();
     words = wordColorMap.keys.toList();
     colors = wordColorMap.values.toList();
-    _loadLanguage();
-    Future.delayed(Duration.zero, () {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Game Start'),
-            content: Text(
-              'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
-            ),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  nextWord();
-                },
-              ),
-            ],
-          );
-        },
-      );
+    print("jezik je $isCroatian");
+    _loadLanguage().then((_) {
+      // After the language has been loaded, show the dialog
+      _showGameStartDialog();
     });
   }
+
+  void _showGameStartDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Game Start'),
+          content: Text(
+            'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
+          ),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                nextWord();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
 
   @override
@@ -176,21 +182,22 @@ class _GamePageState extends State<GamePage> {
         incorrectAnswers++;
       }
       nextWord();
-      if (wordCount == 0) {
-        isCroatian = !isCroatian;
-        navigateToResultPage();
+      if (wordCount ==  0) {
+        navigateToResultPage(); // Navigate to the result page immediately after the round ends
       }
     });
   }
 
   void navigateToResultPage() {
     // Calculate the time taken
-    double timeTaken = (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
-    print(' $isCroatian');
+    double timeTaken = (DateTime.now().difference(startTime).inMilliseconds) /  1000.0;
+    int correctAnswersToPass = isCroatian ? correctAnswers : incorrectAnswers;
+    int incorrectAnswersToPass = isCroatian ? incorrectAnswers : correctAnswers;
     isCroatian = !isCroatian;
-    int correctAnswersToPass = isCroatian ? croatianCorrectAnswers : englishCorrectAnswers;
-    int incorrectAnswersToPass = isCroatian ? croatianIncorrectAnswers : englishIncorrectAnswers;
-    print('nakon $isCroatian');
+    _saveLanguage(isCroatian);
+    correctAnswers =  0;
+    incorrectAnswers =  0;
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -202,23 +209,21 @@ class _GamePageState extends State<GamePage> {
         ),
       ),
     );
-    isCroatian = !isCroatian;
-    _saveLanguage(isCroatian);
-    correctAnswers = 0;
-    incorrectAnswers = 0;
   }
+
 
   Future<void> _loadLanguage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      isCroatian = prefs.getBool('isCroatian') ?? true;
+      isCroatian = Random().nextBool();
     });
+    print("nakon toga spremljen jezik je $isCroatian");
+    _saveLanguage(isCroatian);
   }
 
   Future<void> _saveLanguage(bool isCroatian) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isCroatian', isCroatian);
   }
-
 
 }
