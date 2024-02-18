@@ -8,26 +8,26 @@ class ResultPage extends StatelessWidget {
   final double timeTaken;
   final int correctAnswers;
   final int incorrectAnswers;
-  final bool language;
+  final bool isEnglish;
   final bool bothLanguagesPlayed;
 
 
   ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
-      this.language, this.bothLanguagesPlayed);
+      this.isEnglish, this.bothLanguagesPlayed);
 
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     String userId = user!.uid;
     uploadUserResults(
-        userId, timeTaken, correctAnswers, incorrectAnswers, language);
+        userId, timeTaken, correctAnswers, incorrectAnswers, isEnglish);
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Language: ${language ? 'English' : 'Croatian'}',
+              'Language: ${isEnglish ? 'English' : 'Croatian'}',
               style: Theme
                   .of(context)
                   .textTheme
@@ -83,7 +83,7 @@ class ResultPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => GamePage()),
                   );
                 },
-                child: Text('Continue to second language'),
+                child: Text('Continue to the second language'),
               ),
           ],
         ),
