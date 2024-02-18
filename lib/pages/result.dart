@@ -80,7 +80,7 @@ class ResultPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => GamePage()),
+                    MaterialPageRoute(builder: (context) => GamePage(isCroatian: isEnglish, isSecondRound: true)),
                   );
                 },
                 child: Text('Continue to the second language'),

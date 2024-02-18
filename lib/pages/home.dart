@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'authentication/auth.dart';
@@ -152,11 +154,36 @@ class _HomePageState extends State<HomePage> {
       actions: [
         ElevatedButton(
           onPressed: () {
+            Random r = Random();
+            bool isCroatian =  r.nextBool();
+            void _showGameStartDialog() {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Game Start'),
+                    content: Text(
+                      'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text('OK'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => GamePage(isCroatian: isCroatian)),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
             Navigator.pop(context); // Close the AlertDialog
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => GamePage()),
-            );
+
+            _showGameStartDialog();
           },
           style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
           child: const Text(

@@ -5,12 +5,12 @@ import 'package:stroop_effect/pages/result.dart';
 
 class GamePage extends StatefulWidget {
   final bool? isCroatian;
+  final bool? isSecondRound;
+
+  const GamePage ({ Key? key, this.isCroatian, this.isSecondRound }): super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();
-
-  const GamePage ({ Key? key, this.isCroatian }): super(key: key);
-
 }
 
 class _GamePageState extends State<GamePage> {
@@ -28,6 +28,7 @@ class _GamePageState extends State<GamePage> {
   late String currentWord = '';
   late Color currentColor;
   late bool isCroatian;
+  late bool isSecondRound;
   late Color wordColor = Colors.transparent;
   List<String> words = [];
   List<Color> colors = [];
@@ -42,31 +43,8 @@ class _GamePageState extends State<GamePage> {
     super.initState();
     words = wordColorMap.keys.toList();
     colors = wordColorMap.values.toList();
-    _showGameStartDialog();
   }
 
-  void _showGameStartDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Game Start'),
-          content: Text(
-            'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
-          ),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                nextWord();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   void didChangeDependencies() {
@@ -75,12 +53,11 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isCroatian == null) {
-      Random r = Random();
-      isCroatian = r.nextBool();
-    } else {
-      isCroatian = widget.isCroatian!;
-    }
+
+    isCroatian = widget.isCroatian!;
+    isSecondRound = widget.isSecondRound == true;
+
+    nextWord();
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -197,8 +174,8 @@ class _GamePageState extends State<GamePage> {
           timeTaken,
           correctAnswersToPass,
           incorrectAnswersToPass,
-          isCroatian,
-          bothLanguagesPlayed,
+          !isCroatian,
+          isSecondRound,
         ),
       ),
     );
