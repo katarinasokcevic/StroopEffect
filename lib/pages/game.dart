@@ -4,8 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stroop_effect/pages/result.dart';
 
 class GamePage extends StatefulWidget {
+  final bool? isCroatian;
+
   @override
   _GamePageState createState() => _GamePageState();
+
+  const GamePage ({ Key? key, this.isCroatian }): super(key: key);
+
 }
 
 class _GamePageState extends State<GamePage> {
@@ -29,10 +34,6 @@ class _GamePageState extends State<GamePage> {
   int wordCount = 0;
   int correctAnswers = 0;
   int incorrectAnswers = 0;
-  int croatianCorrectAnswers = 0;
-  int croatianIncorrectAnswers = 0;
-  int englishCorrectAnswers = 0;
-  int englishIncorrectAnswers = 0;
   bool bothLanguagesPlayed = false;
   DateTime startTime = DateTime.now();
 
@@ -41,9 +42,7 @@ class _GamePageState extends State<GamePage> {
     super.initState();
     words = wordColorMap.keys.toList();
     colors = wordColorMap.values.toList();
-    _loadLanguage().then((_) {
-      _showGameStartDialog();
-    });
+    _showGameStartDialog();
   }
 
   void _showGameStartDialog() {
@@ -76,6 +75,12 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isCroatian == null) {
+      Random r = Random();
+      isCroatian = r.nextBool();
+    } else {
+      isCroatian = widget.isCroatian!;
+    }
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -157,13 +162,6 @@ class _GamePageState extends State<GamePage> {
       wordColor = wordColorMap.values.elementAt(Random().nextInt(4));
       wordCount++;
       if (wordCount == 11) {
-        if (isCroatian) {
-          croatianCorrectAnswers += correctAnswers;
-          croatianIncorrectAnswers += incorrectAnswers;
-        } else {
-          englishCorrectAnswers += correctAnswers;
-          englishIncorrectAnswers += incorrectAnswers;
-        }
         wordCount = 0;
       }
     });
@@ -192,10 +190,6 @@ class _GamePageState extends State<GamePage> {
     correctAnswers =  0;
     incorrectAnswers =  0;
 
-    isCroatian = !isCroatian;
-    _saveLanguage(isCroatian);
-    bool bothLanguagesPlayed = !isCroatian;
-
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -209,24 +203,4 @@ class _GamePageState extends State<GamePage> {
       ),
     );
   }
-
-  Future<void> _loadLanguage() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? isCroatian = prefs.getBool('isCroatian');
-
-    if (isCroatian == null) {
-      isCroatian = Random().nextBool();
-      await _saveLanguage(isCroatian);
-    }
-    setState(() {
-      this.isCroatian = isCroatian!;
-    });
-  }
-
-
-  Future<void> _saveLanguage(bool isCroatian) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isCroatian', isCroatian);
-  }
-
 }
