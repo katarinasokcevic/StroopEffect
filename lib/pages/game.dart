@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stroop_effect/pages/result.dart';
 
+const wordsCount = 10;
 class GamePage extends StatefulWidget {
   final bool? isCroatian;
   final bool? isSecondRound;
@@ -32,10 +33,11 @@ class _GamePageState extends State<GamePage> {
   late Color wordColor = Colors.transparent;
   List<String> words = [];
   List<Color> colors = [];
-  int wordCount = 0;
+  int wordLeftCounter = wordsCount;
   int correctAnswers = 0;
   int incorrectAnswers = 0;
   bool bothLanguagesPlayed = false;
+  bool quizStarted = false;
   DateTime startTime = DateTime.now();
 
   @override
@@ -53,11 +55,18 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!quizStarted) {
+      isCroatian = widget.isCroatian!;
+      isSecondRound = widget.isSecondRound == true;
+      nextWord();
+      quizStarted = true;
+    }
+    if (wordLeftCounter ==  -1) {
+      print(wordLeftCounter);
+      navigateToResultPage();
+      return Scaffold();
+    }
 
-    isCroatian = widget.isCroatian!;
-    isSecondRound = widget.isSecondRound == true;
-
-    nextWord();
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -137,10 +146,7 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       currentWord = isCroatian ? words[Random().nextInt(4)] : words[Random().nextInt(4) + 4];
       wordColor = wordColorMap.values.elementAt(Random().nextInt(4));
-      wordCount++;
-      if (wordCount == 11) {
-        wordCount = 0;
-      }
+      wordLeftCounter--;
     });
   }
 
@@ -154,9 +160,6 @@ class _GamePageState extends State<GamePage> {
         incorrectAnswers++;
       }
       nextWord();
-      if (wordCount ==  0) {
-        navigateToResultPage();
-      }
     });
   }
 
@@ -166,6 +169,7 @@ class _GamePageState extends State<GamePage> {
     int incorrectAnswersToPass = isCroatian ? incorrectAnswers : correctAnswers;
     correctAnswers =  0;
     incorrectAnswers =  0;
+    isCroatian=!isCroatian;
 
     Navigator.push(
       context,
@@ -174,7 +178,7 @@ class _GamePageState extends State<GamePage> {
           timeTaken,
           correctAnswersToPass,
           incorrectAnswersToPass,
-          !isCroatian,
+          isCroatian,
           isSecondRound,
         ),
       ),
