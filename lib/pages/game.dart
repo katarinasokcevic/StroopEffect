@@ -61,11 +61,6 @@ class _GamePageState extends State<GamePage> {
       nextWord();
       quizStarted = true;
     }
-    if (wordLeftCounter ==  -1) {
-      print(wordLeftCounter);
-      navigateToResultPage();
-      return Scaffold();
-    }
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
@@ -158,6 +153,10 @@ class _GamePageState extends State<GamePage> {
         correctAnswers++;
       } else {
         incorrectAnswers++;
+      }
+      if (wordLeftCounter ==  0) {
+        navigateToResultPage();
+        return;
       }
       nextWord();
     });

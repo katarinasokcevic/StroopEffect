@@ -26,65 +26,92 @@ class ResultPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Language: ${isEnglish ? 'English' : 'Croatian'}',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-            Text(
-              'Time taken: $timeTaken seconds',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-            Text(
-              'Correct answers: $correctAnswers',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-            Text(
-              'Incorrect answers: $incorrectAnswers',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-            Text(
-              'Language: ${bothLanguagesPlayed
-                  ? 'Oba su odigrana'
-                  : 'Samo prvi'}',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline6,
-            ),
-
-            SizedBox(height: 16),
-            if (bothLanguagesPlayed)
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LeaderboardPage()),
-                  );
-                },
-                child: Text('Go to Leaderboard'),
-              )
-            else
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => GamePage(isCroatian: isEnglish, isSecondRound: true)),
-                  );
-                },
-                child: Text('Continue to the second language'),
+            Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
               ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Language: ${isEnglish ? 'English' : 'Croatian'}',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6,
+                  ),
+                  Text(
+                    'Time taken: $timeTaken seconds',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6,
+                  ),
+                  Text(
+                    'Correct answers: $correctAnswers',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6,
+                  ),
+                  Text(
+                    'Incorrect answers: $incorrectAnswers',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6,
+                  ),
+                  Text(
+                    'Language: ${bothLanguagesPlayed
+                        ? 'Oba su odigrana'
+                        : 'Samo prvi'}',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headline6,
+                  ),
+
+                  SizedBox(height: 16),
+                  if (bothLanguagesPlayed)
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LeaderboardPage()),
+                        );
+                      },
+                      child: Text('Go to Leaderboard'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.pink,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.all(25),
+                      ),
+                    )
+                  else
+                    ElevatedButton(
+                      onPressed: () {
+                        print("clicked");
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => GamePage(isCroatian: isEnglish, isSecondRound: true)),
+                        );
+                      },
+                      child: Text('Continue to the second language'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.pink,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.all(25),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
