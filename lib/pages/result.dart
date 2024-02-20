@@ -63,15 +63,6 @@ class ResultPage extends StatelessWidget {
                         .textTheme
                         .headline6,
                   ),
-                  Text(
-                    'Language: ${bothLanguagesPlayed
-                        ? 'Oba su odigrana'
-                        : 'Samo prvi'}',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline6,
-                  ),
 
                   SizedBox(height: 16),
                   if (bothLanguagesPlayed)
@@ -94,7 +85,6 @@ class ResultPage extends StatelessWidget {
                   else
                     ElevatedButton(
                       onPressed: () {
-                        print("clicked");
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => GamePage(isCroatian: isEnglish, isSecondRound: true)),
@@ -125,8 +115,7 @@ class ResultPage extends StatelessWidget {
     Reference userFolderRef = storage.ref(userId);
 
     String data = 'Time taken: $timeTaken seconds\n'
-        'Correct answers: $correctAnswers\n'
-        'Incorrect answers: $incorrectAnswers\n';
+        'Correct answers: $correctAnswers\n';
 
     if (language) {
       Reference resultFileRef = userFolderRef.child('english_results.txt');
