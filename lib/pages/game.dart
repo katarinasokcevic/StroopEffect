@@ -4,11 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stroop_effect/pages/result.dart';
 
 const wordsCount = 10;
+
 class GamePage extends StatefulWidget {
   final bool? isCroatian;
   final bool? isSecondRound;
 
-  const GamePage ({ Key? key, this.isCroatian, this.isSecondRound }): super(key: key);
+  const GamePage({Key? key, this.isCroatian, this.isSecondRound})
+      : super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -46,7 +48,6 @@ class _GamePageState extends State<GamePage> {
     words = wordColorMap.keys.toList();
     colors = wordColorMap.values.toList();
   }
-
 
   @override
   void didChangeDependencies() {
@@ -139,7 +140,9 @@ class _GamePageState extends State<GamePage> {
 
   void nextWord() {
     setState(() {
-      currentWord = isCroatian ? words[Random().nextInt(4)] : words[Random().nextInt(4) + 4];
+      currentWord = isCroatian
+          ? words[Random().nextInt(4)]
+          : words[Random().nextInt(4) + 4];
       wordColor = wordColorMap.values.elementAt(Random().nextInt(4));
       wordLeftCounter--;
     });
@@ -154,7 +157,7 @@ class _GamePageState extends State<GamePage> {
       } else {
         incorrectAnswers++;
       }
-      if (wordLeftCounter ==  0) {
+      if (wordLeftCounter == 0) {
         navigateToResultPage();
         return;
       }
@@ -163,12 +166,13 @@ class _GamePageState extends State<GamePage> {
   }
 
   Future<void> navigateToResultPage() async {
-    double timeTaken = (DateTime.now().difference(startTime).inMilliseconds) /  1000.0;
+    double timeTaken =
+        (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
     int correctAnswersToPass = isCroatian ? correctAnswers : incorrectAnswers;
     int incorrectAnswersToPass = isCroatian ? incorrectAnswers : correctAnswers;
-    correctAnswers =  0;
-    incorrectAnswers =  0;
-    isCroatian=!isCroatian;
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    isCroatian = !isCroatian;
 
     Navigator.push(
       context,
