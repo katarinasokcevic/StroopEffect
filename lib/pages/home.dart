@@ -15,12 +15,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPage = 0;
-  late String timestamp;
 
   @override
   void initState() {
     super.initState();
-    timestamp = DateFormat('ddHHmmss').format(DateTime.now());
   }
 
   final user = FirebaseAuth.instance.currentUser!;
@@ -175,12 +173,16 @@ class _HomePageState extends State<HomePage> {
                       TextButton(
                         child: Text('OK'),
                         onPressed: () {
+                          var timestamp =
+                              DateFormat('ddHHmmss').format(DateTime.now());
                           Navigator.of(context).pop();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    GamePage(isCroatian: isCroatian, timestamp:timestamp)),
+                                builder: (context) => GamePage(
+                                    isCroatian: isCroatian,
+                                    isSecondRound: false,
+                                    timestamp: timestamp)),
                           );
                         },
                       ),
