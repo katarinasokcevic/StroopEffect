@@ -1,12 +1,24 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'game.dart';
 import 'leaderboard.dart';
+
+class ResultData {
+  final String userId;
+  final String timestamp;
+  String? nickname;
+  int? correctEnglish;
+  double? timeEnglish;
+  int? correctCroatian;
+  double? timeCroatian;
+  ResultData(this.userId, this.timestamp);
+}
 
 class ResultPage extends StatelessWidget {
   final double timeTaken;
@@ -87,22 +99,9 @@ class ResultPage extends StatelessWidget {
                                     User? user =
                                         FirebaseAuth.instance.currentUser;
                                     String userId = user!.uid;
-                                    List<String> languages = [
-                                      'croatian',
-                                      'english'
-                                    ];
-
-                                    for (var language in languages) {
-                                      Reference refResults =
-                                          FirebaseStorage.instance.ref(
-                                              '$userId/${language}_results_$timestamp.txt');
-                                      Uint8List? data =
-                                          await refResults.getData();
-                                      String results =
-                                          utf8.decode(data as List<int>);
-                                      results += 'Name: $name';
-                                      await refResults.putString(results);
-                                    }
+                                    var results = await currentResults(userId);
+                                    results.nickname = name;
+                                    saveResult(results);
 
                                     Navigator.of(context).pop();
                                     Navigator.pushReplacement(
@@ -156,24 +155,54 @@ class ResultPage extends StatelessWidget {
   }
 
   Future<void> uploadUserResults(String userId, double timeTaken,
-      int correctAnswers, int incorrectAnswers, bool language) async {
-    FirebaseStorage storage = FirebaseStorage.instance;
+      int correctAnswers, int incorrectAnswers, bool isEnglish) async {
+    var resultData = await currentResults(userId);
 
-    Reference userFolderRef = storage.ref(userId);
+    if (isEnglish) {
+      resultData.correctEnglish = correctAnswers;
+      resultData.timeEnglish = timeTaken;
+    } else {
+      resultData.correctCroatian = correctAnswers;
+      resultData.timeCroatian = timeTaken;
+    }
+    await saveResult(resultData);
+  }
 
-    String data = 'Time taken: $timeTaken seconds\n'
-        'Correct answers: $correctAnswers\n';
-
+  Future<ResultData> currentResults(String userId) async {
+    // TODO: fix timestamp - pass it in constructor
     timestamp ??= DateFormat('ddHHmmss').format(DateTime.now());
 
-    if (language) {
-      Reference resultFileRef =
-          userFolderRef.child('english_results_$timestamp.txt');
-      await resultFileRef.putString(data);
-    } else {
-      Reference resultFileRef =
-          userFolderRef.child('croatian_results_$timestamp.txt');
-      await resultFileRef.putString(data);
+    var db = FirebaseFirestore.instance;
+    ResultData data = ResultData(userId, timestamp!);
+    final docSnap = await db.collection("results").doc(timestamp).get(const GetOptions(source: Source.server));
+    final res = docSnap.data();
+    if (res == null) {
+      return data;
     }
+
+    if (res['timeCroatian'] != null) {
+      data.timeCroatian = res['timeCroatian'];
+      data.correctCroatian = res['correctCroatian'];
+    }
+    if (res['timeEnglish'] != null) {
+      data.timeEnglish = res['timeEnglish'];
+      data.correctEnglish = res['correctEnglish'];
+    }
+
+    return data;
+  }
+
+  Future<void> saveResult(ResultData data) async {
+    var db = FirebaseFirestore.instance;
+    var dbData = <String, dynamic>{
+      'userId': data.userId,
+      'timestamp': data.timestamp,
+      'timeCroatian': data.timeCroatian,
+      'timeEnglish': data.timeEnglish,
+      'correctEnglish': data.correctEnglish,
+      'correctCroatian': data.correctCroatian,
+      'nickname': data.nickname,
+    };
+    await db.collection("results").doc(timestamp).set(dbData);
   }
 }

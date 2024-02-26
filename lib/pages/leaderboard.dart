@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -90,7 +91,12 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 ElevatedButton(
                   onPressed: () async {
                     language = 'croatian';
-                    leaderboardData = await fetchAllData(language);
+                    //leaderboardData = await fetchAllData(language);
+                    var db = FirebaseFirestore.instance;
+                    final resultsRef = db.collection("results");
+                    final data = resultsRef.orderBy("correctCroatian", descending: true).
+                    orderBy("timeCroatian", descending: false).limit(10);
+                    // TODO sokcevic
                     sortLeaderboardData(leaderboardData);
                     setState(() {});
                   },
@@ -107,7 +113,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 ElevatedButton(
                   onPressed: () async {
                     language = 'english';
-                    leaderboardData = await fetchAllData(language);
+                    //leaderboardData = await fetchAllData(language);
+                    var db = FirebaseFirestore.instance;
+                    final resultsRef = db.collection("results");
+                    final data = resultsRef.orderBy("correctEnglish", descending: true).
+                    orderBy("timeEnglish", descending: false).limit(10);
                     sortLeaderboardData(leaderboardData);
                     setState(() {});
                   },
