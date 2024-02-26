@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stroop_effect/pages/result.dart';
 
-const wordsCount = 10;
+const wordsCount = 5;
 
 class GamePage extends StatefulWidget {
   final bool? isCroatian;
