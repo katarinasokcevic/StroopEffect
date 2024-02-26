@@ -21,18 +21,16 @@ class ResultPage extends StatelessWidget {
   final int incorrectAnswers;
   final bool isEnglish;
   final bool bothLanguagesPlayed;
-  final String timestamp;
+  final ResultData resultData;
 
 
   ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
-      this.isEnglish, this.bothLanguagesPlayed, this.timestamp);
+      this.isEnglish, this.bothLanguagesPlayed, this.resultData);
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-    String userId = user!.uid;
     uploadUserResults(
-        userId, timeTaken, correctAnswers, incorrectAnswers, isEnglish, timestamp);
+        resultData, timeTaken, correctAnswers, isEnglish);
     return Scaffold(
       body: Center(
         child: Column(
@@ -47,10 +45,18 @@ class ResultPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  buildText('Language: ${isEnglish ? 'English' : 'Croatian'}', context),
-                  buildText('Time taken: $timeTaken seconds', context),
-                  buildText('Correct answers: $correctAnswers', context),
-                  buildText('Incorrect answers: $incorrectAnswers', context),
+                  Text('Language: ${isEnglish ? 'English' : 'Croatian'}',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  Text('Time taken: $timeTaken seconds',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  Text('Correct answers: $correctAnswers',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  Text('Incorrect answers: $incorrectAnswers',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   SizedBox(height: 16),
                   if (bothLanguagesPlayed)
                     ElevatedButton(
@@ -73,7 +79,7 @@ class ResultPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => GamePage(
-                                  isCroatian: isEnglish, isSecondRound: true, timestamp: timestamp)),
+                                  isCroatian: isEnglish, isSecondRound: true, resultData: resultData)),
                         );
                       },
                       child: Text('Continue to the second language'),
@@ -121,17 +127,18 @@ class ResultPage extends StatelessWidget {
               onPressed: () async {
                 User? user = FirebaseAuth.instance.currentUser;
                 String userId = user!.uid;
-                var results = await currentResults(userId, timestamp);
-                results.nickname = name;
-                saveResult(results);
+                resultData.nickname = name;
+                saveResult();
 
-                Navigator.of(context).pop();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LeaderboardPage(),
-                  ),
-                );
+                //Navigator.of(context).pop();
+                if (context.mounted) { // Check if the widget is still mounted
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LeaderboardPage(),
+                    ),
+                  );
+                }
               },
             ),
           ],
@@ -140,16 +147,8 @@ class ResultPage extends StatelessWidget {
     );
   }
 
-  Widget buildText(String text, BuildContext context) {
-    return Text(
-      text,
-      style: Theme.of(context).textTheme.headline6,
-    );
-  }
-
-  Future<void> uploadUserResults(String userId, double timeTaken,
-      int correctAnswers, int incorrectAnswers, bool isEnglish, String timestamp ) async {
-    var resultData = await currentResults(userId,timestamp);
+  Future<void> uploadUserResults(ResultData resultData, double timeTaken,
+      int correctAnswers, bool isEnglish) async {
     if (isEnglish) {
       resultData.correctEnglish = correctAnswers;
       resultData.timeEnglish = timeTaken;
@@ -157,40 +156,20 @@ class ResultPage extends StatelessWidget {
       resultData.correctCroatian = correctAnswers;
       resultData.timeCroatian = timeTaken;
     }
-    await saveResult(resultData);
   }
 
-  Future<ResultData> currentResults(String userId, String timestamp) async {
-    var db = FirebaseFirestore.instance;
-    ResultData data = ResultData(userId, timestamp!);
-    final docSnap = await db.collection("results").doc(timestamp).get(const GetOptions(source: Source.server));
-    final res = docSnap.data();
-    if (res == null) {
-      return data;
-    }
 
-    if (res['timeCroatian'] != null) {
-      data.timeCroatian = res['timeCroatian'];
-      data.correctCroatian = res['correctCroatian'];
-    }
-    if (res['timeEnglish'] != null) {
-      data.timeEnglish = res['timeEnglish'];
-      data.correctEnglish = res['correctEnglish'];
-    }
-    return data;
-  }
-
-  Future<void> saveResult(ResultData data) async {
+  Future<void> saveResult() async {
     var db = FirebaseFirestore.instance;
     var dbData = <String, dynamic>{
-      'userId': data.userId,
-      'timestamp': data.timestamp,
-      'timeCroatian': data.timeCroatian,
-      'timeEnglish': data.timeEnglish,
-      'correctEnglish': data.correctEnglish,
-      'correctCroatian': data.correctCroatian,
-      'nickname': data.nickname,
+      'userId': resultData.userId,
+      'timestamp': resultData.timestamp,
+      'timeCroatian': resultData.timeCroatian,
+      'timeEnglish': resultData.timeEnglish,
+      'correctEnglish': resultData.correctEnglish,
+      'correctCroatian': resultData.correctCroatian,
+      'nickname': resultData.nickname,
     };
-    await db.collection("results").doc(timestamp).set(dbData);
+    await db.collection("results").doc(resultData.timestamp).set(dbData);
   }
 }

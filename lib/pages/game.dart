@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stroop_effect/pages/result.dart';
 
-const wordsCount = 5;
+const wordsCount = 10;
 
 class GamePage extends StatefulWidget {
   final bool isCroatian;
   final bool isSecondRound;
-  final String timestamp;
+  final ResultData resultData;
 
   const GamePage(
       {Key? key,
       required this.isCroatian,
       required this.isSecondRound,
-      required this.timestamp})
+      required this.resultData})
       : super(key: key);
 
   @override
@@ -169,10 +169,8 @@ class _GamePageState extends State<GamePage> {
   Future<void> navigateToResultPage() async {
     double timeTaken =
         (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
-    int correctAnswersToPass =
-        widget.isCroatian ? correctAnswers : incorrectAnswers;
-    int incorrectAnswersToPass =
-        widget.isCroatian ? incorrectAnswers : correctAnswers;
+    int correctAnswersToPass = correctAnswers;
+    int incorrectAnswersToPass = incorrectAnswers;
     correctAnswers = 0;
     incorrectAnswers = 0;
 
@@ -185,7 +183,7 @@ class _GamePageState extends State<GamePage> {
           incorrectAnswersToPass,
           !widget.isCroatian,
           widget.isSecondRound,
-          widget.timestamp,
+          widget.resultData,
         ),
       ),
     );
