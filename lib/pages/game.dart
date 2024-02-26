@@ -8,8 +8,9 @@ const wordsCount = 5;
 class GamePage extends StatefulWidget {
   final bool? isCroatian;
   final bool? isSecondRound;
+  final String timestamp;
 
-  const GamePage({Key? key, this.isCroatian, this.isSecondRound})
+  const GamePage({Key? key, this.isCroatian, this.isSecondRound, required this.timestamp})
       : super(key: key);
 
   @override
@@ -158,14 +159,14 @@ class _GamePageState extends State<GamePage> {
         incorrectAnswers++;
       }
       if (wordLeftCounter == 0) {
-        navigateToResultPage();
+        navigateToResultPage(widget.timestamp);
         return;
       }
       nextWord();
     });
   }
 
-  Future<void> navigateToResultPage() async {
+  Future<void> navigateToResultPage(String timestamp) async {
     double timeTaken =
         (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
     int correctAnswersToPass = isCroatian ? correctAnswers : incorrectAnswers;
@@ -183,6 +184,7 @@ class _GamePageState extends State<GamePage> {
           incorrectAnswersToPass,
           isCroatian,
           isSecondRound,
+          timestamp,
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'authentication/auth.dart';
 import 'game.dart';
 
@@ -14,7 +15,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPage = 0;
-  List<Widget> pages = [HomePage()];
+  late String timestamp;
+
+  @override
+  void initState() {
+    super.initState();
+    timestamp = DateFormat('ddHHmmss').format(DateTime.now());
+  }
 
   final user = FirebaseAuth.instance.currentUser!;
 
@@ -173,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    GamePage(isCroatian: isCroatian)),
+                                    GamePage(isCroatian: isCroatian, timestamp:timestamp)),
                           );
                         },
                       ),
