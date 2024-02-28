@@ -102,7 +102,6 @@ class ResultPage extends StatelessWidget {
 
   void _showNameInputDialog(BuildContext context) {
     String name = '';
-
     showDialog(
       context: context,
       builder: (context) {
@@ -125,12 +124,9 @@ class ResultPage extends StatelessWidget {
                 padding: EdgeInsets.all(25),
               ),
               onPressed: () async {
-                User? user = FirebaseAuth.instance.currentUser;
-                String userId = user!.uid;
                 resultData.nickname = name;
                 saveResult();
 
-                //Navigator.of(context).pop();
                 if (context.mounted) { // Check if the widget is still mounted
                   Navigator.pushReplacement(
                     context,
@@ -172,4 +168,7 @@ class ResultPage extends StatelessWidget {
     };
     await db.collection("results").doc(resultData.timestamp).set(dbData);
   }
+
+
+
 }

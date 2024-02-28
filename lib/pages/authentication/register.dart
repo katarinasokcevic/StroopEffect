@@ -27,13 +27,12 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     try {
-      if(passwordController.text == confirmPasswordController.text ) {
+      if (passwordController.text == confirmPasswordController.text) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
-      }
-      else {
+      } else {
         showErrorMessage("Passwords don't match");
       }
 
@@ -65,6 +64,24 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget _buildResponsiveContainer(double maxWidth, Widget child) {
+    double width = maxWidth;
+    if (MediaQuery.of(context).size.shortestSide < 600) {
+      width *= 0.8; // Use 80% of the width for mobile devices
+    } else if (MediaQuery.of(context).size.shortestSide >= 600 &&
+        MediaQuery.of(context).size.shortestSide < 1200) {
+      width *= 0.4; // Use 40% of the width for tablets
+    } else {
+      width *= 0.15; // Use 20% of the width for larger screens
+    }
+    return Center(
+      child: Container(
+        width: width,
+        child: child,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -83,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 50),
                 const Text(
                   'Welcome to Stroop Effect app!',
@@ -91,106 +107,107 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontSize: 16,
                   ),
                 ),
-
                 const SizedBox(height: 25),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth > 600 ? 1100 : 25,
-                  ),
-                  child: TextField(
-                    controller: emailController,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      fillColor: Colors.grey.shade200,
-                      filled: true,
-                      hintText: 'Email',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth > 600 ? 1100 : 25,
-                  ),
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      fillColor: Colors.grey.shade200,
-                      filled: true,
-                      hintText: 'Password',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth > 600 ? 1100 : 25,
-                  ),
-                  child: TextField(
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      fillColor: Colors.grey.shade200,
-                      filled: true,
-                      hintText: 'Confirm Password',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-
-                GestureDetector(
-                  onTap: signUserUp,
-                  child: Container(
-                    padding: EdgeInsets.all(25),
-                    margin: EdgeInsets.symmetric(
-                      horizontal: screenWidth > 600 ? 1100 : 25,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.pink,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return _buildResponsiveContainer(
+                      constraints.maxWidth,
+                      TextField(
+                        controller: emailController,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Email',
+                          hintStyle: TextStyle(color: Colors.grey[500]),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-
+                const SizedBox(height: 10),
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return _buildResponsiveContainer(
+                      constraints.maxWidth,
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Password',
+                          hintStyle: TextStyle(color: Colors.grey[500]),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return _buildResponsiveContainer(
+                      constraints.maxWidth,
+                      TextField(
+                        controller: confirmPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Confirm Password',
+                          hintStyle: TextStyle(color: Colors.grey[500]),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 25),
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return _buildResponsiveContainer(
+                      constraints.maxWidth,
+                      GestureDetector(
+                        onTap: signUserUp,
+                        child: Container(
+                          padding: EdgeInsets.all(25),
+                          decoration: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 80),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -204,7 +221,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
