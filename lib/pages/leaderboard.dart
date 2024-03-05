@@ -107,7 +107,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   MaterialPageRoute(builder: (context) => HomePage()),
                 );
               },
-              child: Text('Start Again'),
+              child: Text('Go to Menu'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.pink,
                 shape: RoundedRectangleBorder(

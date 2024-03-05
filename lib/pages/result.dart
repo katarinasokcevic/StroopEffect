@@ -106,12 +106,12 @@ class ResultPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Enter your name for the leaderboard'),
+          title: const Text('Enter your name and lastname for the leaderboard'),
           content: TextField(
             onChanged: (value) {
               name = value;
             },
-            decoration: const InputDecoration(hintText: "Name"),
+            decoration: const InputDecoration(hintText: "Name and lastname"),
           ),
           actions: <Widget>[
             ElevatedButton(
@@ -127,7 +127,7 @@ class ResultPage extends StatelessWidget {
                 resultData.nickname = name;
                 saveResult();
 
-                if (context.mounted) { // Check if the widget is still mounted
+                if (context.mounted) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -154,7 +154,6 @@ class ResultPage extends StatelessWidget {
     }
   }
 
-
   Future<void> saveResult() async {
     var db = FirebaseFirestore.instance;
     var dbData = <String, dynamic>{
@@ -167,8 +166,89 @@ class ResultPage extends StatelessWidget {
       'nickname': resultData.nickname,
     };
     await db.collection("results").doc(resultData.timestamp).set(dbData);
+    await saveFirstResult(resultData);
+    await calculateAndSaveAverages();
   }
 
+  Future<void> saveFirstResult(ResultData resultData) async {
+    var db = FirebaseFirestore.instance;
+    var userDocRef = db.collection('FirstResults').doc(resultData.userId);
+    var userDoc = await userDocRef.get();
 
+    if (!userDoc.exists) {
+      var dbData = <String, dynamic>{
+        'timeCroatian': resultData.timeCroatian,
+        'timeEnglish': resultData.timeEnglish,
+        'correctEnglish': resultData.correctEnglish,
+        'correctCroatian': resultData.correctCroatian,
+      };
+
+      await userDocRef.set(dbData);
+    }
+  }
+
+  Future<void> calculateAndSaveAverages() async {
+    var averages = await calculateAverages();
+    await saveAveragesToFirestore(averages);
+  }
+
+  Future<Map<String, dynamic>> calculateAverages() async {
+    var db = FirebaseFirestore.instance;
+    var firstResultsQuery = await db.collection('FirstResults').get();
+
+    double totalAverageTimeCroatian = 0;
+    double totalAverageTimeEnglish = 0;
+    int totalCorrectAnswersCroatian = 0;
+    int totalCorrectAnswersEnglish = 0;
+    int userCount = 0;
+
+    for (var resultDoc in firstResultsQuery.docs) {
+      var timeCroatian = resultDoc['timeCroatian'] as double?;
+      var timeEnglish = resultDoc['timeEnglish'] as double?;
+      var correctCroatian = resultDoc['correctCroatian'] as int?;
+      var correctEnglish = resultDoc['correctEnglish'] as int?;
+
+      if (timeCroatian != null && timeEnglish != null && correctCroatian != null && correctEnglish != null) {
+        totalAverageTimeCroatian += timeCroatian;
+        totalAverageTimeEnglish += timeEnglish;
+        totalCorrectAnswersCroatian += correctCroatian;
+        totalCorrectAnswersEnglish += correctEnglish;
+        userCount++;
+      }
+    }
+
+    if (userCount > 0) {
+      double averageTimeCroatian = totalAverageTimeCroatian / userCount;
+      double averageTimeEnglish = totalAverageTimeEnglish / userCount;
+      double averageCorrectAnswersCroatian = totalCorrectAnswersCroatian / userCount;
+      double averageCorrectAnswersEnglish = totalCorrectAnswersEnglish / userCount;
+
+      return {
+        'averageTimeCroatian': averageTimeCroatian,
+        'averageTimeEnglish': averageTimeEnglish,
+        'averageCorrectAnswersCroatian': averageCorrectAnswersCroatian,
+        'averageCorrectAnswersEnglish': averageCorrectAnswersEnglish,
+      };
+    } else {
+      return {
+        'averageTimeCroatian': 0.0,
+        'averageTimeEnglish': 0.0,
+        'averageCorrectAnswersCroatian': 0.0,
+        'averageCorrectAnswersEnglish': 0.0,
+      };
+    }
+  }
+
+  Future<void> saveAveragesToFirestore(Map<String, dynamic> averages) async {
+    var db = FirebaseFirestore.instance;
+
+    var dbData = <String, dynamic>{
+      'averageTimeCroatian': averages['averageTimeCroatian'],
+      'averageTimeEnglish': averages['averageTimeEnglish'],
+      'averageCorrectAnswersCroatian': averages['averageCorrectAnswersCroatian'],
+      'averageCorrectAnswersEnglish': averages['averageCorrectAnswersEnglish'],
+    };
+    await db.collection("AverageResults").doc('averages').set(dbData);
+  }
 
 }
