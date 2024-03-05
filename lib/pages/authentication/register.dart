@@ -67,12 +67,12 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildResponsiveContainer(double maxWidth, Widget child) {
     double width = maxWidth;
     if (MediaQuery.of(context).size.shortestSide < 600) {
-      width *= 0.8; // Use 80% of the width for mobile devices
+      width *= 0.8;
     } else if (MediaQuery.of(context).size.shortestSide >= 600 &&
         MediaQuery.of(context).size.shortestSide < 1200) {
-      width *= 0.4; // Use 40% of the width for tablets
+      width *= 0.4;
     } else {
-      width *= 0.15; // Use 20% of the width for larger screens
+      width *= 0.15;
     }
     return Center(
       child: Container(
@@ -84,7 +84,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(

@@ -33,29 +33,29 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     isCroatian = true;
                     fetchCroatianData();
                   },
-                  child: Text('Croatian'),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.pink,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.all(25),
+                    padding: const EdgeInsets.all(25),
                   ),
+                  child: const Text('Croatian'),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () async {
                     isCroatian = false;
                     fetchEnglishData();
                   },
-                  child: Text('English'),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.pink,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.all(25),
+                    padding: const EdgeInsets.all(25),
                   ),
+                  child: const Text('English'),
                 ),
               ],
             ),
@@ -92,29 +92,29 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                       return DataRow(
                         cells: <DataCell>[
                           DataCell(Text('${index + 1}.')),
-                          DataCell(Text(playerData['nickname'])),
+                          DataCell(Text(playerData['name'])),
                           DataCell(Text('${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}')),
                           DataCell(Text('${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
                         ],
                       );
                     }).take(10).toList(),
             ),
-            SizedBox(width: 30),
+            const SizedBox(width: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               },
-              child: Text('Go to Menu'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.pink,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                padding: EdgeInsets.all(25),
+                padding: const EdgeInsets.all(25),
               ),
+              child: const Text('Go to Menu'),
             ),
           ],
         ),

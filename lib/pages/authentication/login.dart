@@ -11,13 +11,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  // sign user in method
   void signUserIn() async {
-    // show loading circle
     showDialog(
       context: context,
       builder: (context) {
@@ -27,19 +24,16 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
-    // try sign in
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      // Pop the loading circle
       if (context.mounted) {
         Navigator.pop(context);
       }
     } on FirebaseAuthException catch (e) {
-      // Pop the loading circle
       if (context.mounted) {
         Navigator.pop(context);
       }
@@ -48,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // error message to user
   void showErrorMessage(String message) {
     showDialog(
       context: context,
@@ -69,11 +62,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildResponsiveContainer(double maxWidth, Widget child) {
     double width = maxWidth;
     if (MediaQuery.of(context).size.shortestSide < 600) {
-      width *= 0.8; // Use 80% of the width for mobile devices
+      width *= 0.8;
     } else if (MediaQuery.of(context).size.shortestSide >= 600 && MediaQuery.of(context).size.shortestSide < 1200) {
-      width *= 0.4; // Use 40% of the width for tablets
+      width *= 0.4;
     } else {
-      width *= 0.15; // Use 20% of the width for larger screens
+      width *= 0.15;
     }
     return Center(
       child: Container(
@@ -110,7 +103,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 25),
-                // email textfield
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return _buildResponsiveContainer(
@@ -137,8 +129,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 10),
-
-                // password textfield
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return _buildResponsiveContainer(
@@ -167,7 +157,6 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
                 const SizedBox(height: 25),
 
-                // sign in button
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return _buildResponsiveContainer(
@@ -175,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                           onTap: signUserIn,
                           child: Container(
-                            padding: EdgeInsets.all(25),
+                            padding: const EdgeInsets.all(25),
                             decoration: BoxDecoration(
                               color: Colors.pink,
                               borderRadius: BorderRadius.circular(8),
@@ -198,7 +187,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 80),
 
-                // or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -213,7 +201,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

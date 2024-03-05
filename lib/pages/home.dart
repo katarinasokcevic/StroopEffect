@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:stroop_effect/pages/result.dart';
+import '../result_data.dart';
 import 'authentication/auth.dart';
 import 'game.dart';
 
@@ -166,13 +166,13 @@ class _HomePageState extends State<HomePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Game Start'),
+                    title: const Text('Game Start'),
                     content: Text(
                       'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
                     ),
                     actions: [
                       TextButton(
-                        child: Text('OK'),
+                        child: const Text('OK'),
                         onPressed: () {
                           var timestamp =
                               DateFormat('ddHHmmss').format(DateTime.now());

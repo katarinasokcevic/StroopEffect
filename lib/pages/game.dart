@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/pages/result.dart';
+import 'package:stroop_effect/question_result.dart';
+import 'package:stroop_effect/color_map.dart';
+import 'dart:math';
+import '../result_data.dart';
 
 const wordsCount = 10;
+const questionNumber = 1;
 
 class GamePage extends StatefulWidget {
   final bool isCroatian;
@@ -22,27 +26,19 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  final Map<String, Color> wordColorMap = {
-    'zelena': Colors.green,
-    'plava': Colors.blue,
-    'žuta': Colors.yellow,
-    'crvena': Colors.red,
-    'green': Colors.green,
-    'blue': Colors.blue,
-    'yellow': Colors.yellow,
-    'red': Colors.red
-  };
-
+  List<QuestionResult> questionResults = [];
   late String currentWord = '';
   late Color currentColor;
   late Color wordColor = Colors.transparent;
   List<String> words = [];
   List<Color> colors = [];
   int wordLeftCounter = wordsCount;
+  int currentQuestionNumber = questionNumber;
   int correctAnswers = 0;
   int incorrectAnswers = 0;
   bool bothLanguagesPlayed = false;
   bool quizStarted = false;
+  DateTime questionStartTime = DateTime.now();
   DateTime startTime = DateTime.now();
 
   @override
@@ -141,6 +137,7 @@ class _GamePageState extends State<GamePage> {
 
   void nextWord() {
     setState(() {
+      questionStartTime = DateTime.now();
       currentWord = widget.isCroatian
           ? words[Random().nextInt(4)]
           : words[Random().nextInt(4) + 4];
@@ -158,10 +155,23 @@ class _GamePageState extends State<GamePage> {
       } else {
         incorrectAnswers++;
       }
+      double timeTaken =
+          (DateTime.now().difference(questionStartTime).inMilliseconds) /
+              1000.0;
+      questionResults.add(QuestionResult(
+        questionNumber: currentQuestionNumber++,
+        displayedColor: wordColor,
+        selectedColor: selectedColor,
+        isCroatian: widget.isCroatian,
+        isCorrect: selectedColor == expectedColor,
+        timeTaken: timeTaken,
+      ));
+
       if (wordLeftCounter == 0) {
         navigateToResultPage();
         return;
       }
+
       nextWord();
     });
   }
@@ -184,6 +194,7 @@ class _GamePageState extends State<GamePage> {
           !widget.isCroatian,
           widget.isSecondRound,
           widget.resultData,
+          questionResults,
         ),
       ),
     );
