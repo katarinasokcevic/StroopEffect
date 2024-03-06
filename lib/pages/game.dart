@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/pages/result.dart';
-import 'package:stroop_effect/question_result.dart';
-import 'package:stroop_effect/color_map.dart';
 import 'dart:math';
+import '../answer_data.dart';
 import '../result_data.dart';
 
 const wordsCount = 10;
@@ -13,20 +12,22 @@ class GamePage extends StatefulWidget {
   final bool isCroatian;
   final bool isSecondRound;
   final ResultData resultData;
+  final List<AnswerData> answers;
 
-  const GamePage(
-      {Key? key,
-      required this.isCroatian,
-      required this.isSecondRound,
-      required this.resultData})
-      : super(key: key);
+  const GamePage({
+    Key? key,
+    required this.isCroatian,
+    required this.isSecondRound,
+    required this.resultData,
+    required this.answers,
+  }) : super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();
 }
 
 class _GamePageState extends State<GamePage> {
-  List<QuestionResult> questionResults = [];
+  List<AnswerData> answers = [];
   late String currentWord = '';
   late Color currentColor;
   late Color wordColor = Colors.transparent;
@@ -46,6 +47,7 @@ class _GamePageState extends State<GamePage> {
     super.initState();
     words = wordColorMap.keys.toList();
     colors = wordColorMap.values.toList();
+    answers = List.from(widget.answers);
   }
 
   @override
@@ -158,8 +160,9 @@ class _GamePageState extends State<GamePage> {
       double timeTaken =
           (DateTime.now().difference(questionStartTime).inMilliseconds) /
               1000.0;
-      questionResults.add(QuestionResult(
+      answers.add(AnswerData(
         questionNumber: currentQuestionNumber++,
+        displayedWord: currentWord,
         displayedColor: wordColor,
         selectedColor: selectedColor,
         isCroatian: widget.isCroatian,
@@ -194,7 +197,7 @@ class _GamePageState extends State<GamePage> {
           !widget.isCroatian,
           widget.isSecondRound,
           widget.resultData,
-          questionResults,
+          answers,
         ),
       ),
     );

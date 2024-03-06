@@ -63,7 +63,8 @@ class _LoginPageState extends State<LoginPage> {
     double width = maxWidth;
     if (MediaQuery.of(context).size.shortestSide < 600) {
       width *= 0.8;
-    } else if (MediaQuery.of(context).size.shortestSide >= 600 && MediaQuery.of(context).size.shortestSide < 1200) {
+    } else if (MediaQuery.of(context).size.shortestSide >= 600 &&
+        MediaQuery.of(context).size.shortestSide < 1200) {
       width *= 0.4;
     } else {
       width *= 0.15;
@@ -93,7 +94,6 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 50),
                 const Text(
                   'Welcome back!',
@@ -101,92 +101,84 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 16,
                   ),
                 ),
-
                 const SizedBox(height: 25),
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return _buildResponsiveContainer(
                       constraints.maxWidth,
                       TextField(
-                          controller: emailController,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade400),
-                            ),
-                            fillColor: Colors.grey.shade200,
-                            filled: true,
-                            hintText: 'Email',
-                            hintStyle: TextStyle(color: Colors.grey[500]),
+                        controller: emailController,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
                           ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Email',
+                          hintStyle: TextStyle(color: Colors.grey[500]),
+                        ),
                       ),
                     );
                   },
                 ),
-
                 const SizedBox(height: 10),
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return _buildResponsiveContainer(
                       constraints.maxWidth,
                       TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade400),
-                            ),
-                            fillColor: Colors.grey.shade200,
-                            filled: true,
-                            hintText: 'Password',
-                            hintStyle: TextStyle(color: Colors.grey[500]),
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
                           ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Password',
+                          hintStyle: TextStyle(color: Colors.grey[500]),
+                        ),
                       ),
                     );
                   },
                 ),
-
                 const SizedBox(height: 10),
                 const SizedBox(height: 25),
-
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return _buildResponsiveContainer(
                       constraints.maxWidth,
                       GestureDetector(
-                          onTap: signUserIn,
-                          child: Container(
-                            padding: const EdgeInsets.all(25),
-                            decoration: BoxDecoration(
-                              color: Colors.pink,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                        onTap: signUserIn,
+                        child: Container(
+                          padding: const EdgeInsets.all(25),
+                          decoration: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "Sign In",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
                           ),
+                        ),
                       ),
                     );
                   },
                 ),
-
                 const SizedBox(height: 80),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -200,7 +192,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

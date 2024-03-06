@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 
 class LeaderboardPage extends StatefulWidget {
-
   @override
   _LeaderboardPageState createState() => _LeaderboardPageState();
 }
@@ -60,44 +59,56 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               ],
             ),
             DataTable(
-                    columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Ranking',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Text(
+                    'Ranking',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Name',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Correct\nanswers',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Time',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+              rows: allData
+                  .asMap()
+                  .entries
+                  .map((entry) {
+                    int index = entry.key;
+                    Map<String, dynamic> playerData = entry.value;
+                    return DataRow(
+                      cells: <DataCell>[
+                        DataCell(
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text('${index + 1}.'),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Correct\nanswers',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Time',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                    rows: allData.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      Map<String, dynamic> playerData = entry.value;
-                      return DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('${index + 1}.')),
-                          DataCell(Text(playerData['name'])),
-                          DataCell(Text('${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}')),
-                          DataCell(Text('${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
-                        ],
-                      );
-                    }).take(10).toList(),
+                        DataCell(Text(playerData['name'])),
+                        DataCell(Text(
+                            '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}')),
+                        DataCell(Text(
+                            '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
+                      ],
+                    );
+                  })
+                  .take(10)
+                  .toList(),
             ),
             const SizedBox(width: 30),
             ElevatedButton(
@@ -125,8 +136,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   void fetchCroatianData() async {
     var db = FirebaseFirestore.instance;
     final resultsRef = db.collection("results");
-    final data = resultsRef.orderBy("correctCroatian", descending: true).
-    orderBy("timeCroatian", descending: false).limit(10);
+    final data = resultsRef
+        .orderBy("correctCroatian", descending: true)
+        .orderBy("timeCroatian", descending: false)
+        .limit(10);
     var snapshot = await data.get();
     allData = snapshot.docs.map((doc) => doc.data()).toList();
     setState(() {});
@@ -135,8 +148,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   void fetchEnglishData() async {
     var db = FirebaseFirestore.instance;
     final resultsRef = db.collection("results");
-    final data = resultsRef.orderBy("correctEnglish", descending: true).
-    orderBy("timeEnglish", descending: false).limit(10);
+    final data = resultsRef
+        .orderBy("correctEnglish", descending: true)
+        .orderBy("timeEnglish", descending: false)
+        .limit(10);
     var snapshot = await data.get();
     allData = snapshot.docs.map((doc) => doc.data()).toList();
     setState(() {});
