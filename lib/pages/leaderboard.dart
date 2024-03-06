@@ -59,6 +59,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               ],
             ),
             DataTable(
+              columnSpacing: 35.0,
               columns: const <DataColumn>[
                 DataColumn(
                   label: Text(
@@ -100,8 +101,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           ),
                         ),
                         DataCell(Text(playerData['name'])),
-                        DataCell(Text(
-                            '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}')),
+                        DataCell(Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                              '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
+                        )),
                         DataCell(Text(
                             '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
                       ],
