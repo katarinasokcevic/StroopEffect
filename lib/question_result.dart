@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-class AnswerData {
+class QuestionResult {
   final int questionNumber;
-  final String displayedWord;
   final Color displayedColor;
   final Color selectedColor;
   final bool isCroatian;
   final bool isCorrect;
   final double timeTaken;
 
-  AnswerData({
+  QuestionResult({
     required this.questionNumber,
-    required this.displayedWord,
     required this.displayedColor,
     required this.selectedColor,
     required this.isCroatian,

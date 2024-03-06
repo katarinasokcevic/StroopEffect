@@ -1,0 +1,140 @@
+From 0a55eef2dbad955a2e66d8988ed5b652910ea25f Mon Sep 17 00:00:00 2001
+From: Josip Sokcevic <info@sokac.net>
+Date: Sun, 25 Feb 2024 21:59:46 -0800
+Subject: [PATCH] timestamp fix
+
+---
+ lib/pages/game.dart | 33 +++++++++++++++++----------------
+ lib/pages/home.dart | 10 ++++++----
+ 2 files changed, 23 insertions(+), 20 deletions(-)
+
+diff --git a/lib/pages/game.dart b/lib/pages/game.dart
+index e5734e6..8d60443 100644
+--- a/lib/pages/game.dart
++++ b/lib/pages/game.dart
+@@ -6,11 +6,15 @@ import 'package:stroop_effect/pages/result.dart';
+ const wordsCount = 5;
+ 
+ class GamePage extends StatefulWidget {
+-  final bool? isCroatian;
+-  final bool? isSecondRound;
++  final bool isCroatian;
++  final bool isSecondRound;
+   final String timestamp;
+ 
+-  const GamePage({Key? key, this.isCroatian, this.isSecondRound, required this.timestamp})
++  const GamePage(
++      {Key? key,
++      required this.isCroatian,
++      required this.isSecondRound,
++      required this.timestamp})
+       : super(key: key);
+ 
+   @override
+@@ -31,8 +35,6 @@ class _GamePageState extends State<GamePage> {
+ 
+   late String currentWord = '';
+   late Color currentColor;
+-  late bool isCroatian;
+-  late bool isSecondRound;
+   late Color wordColor = Colors.transparent;
+   List<String> words = [];
+   List<Color> colors = [];
+@@ -58,8 +60,6 @@ class _GamePageState extends State<GamePage> {
+   @override
+   Widget build(BuildContext context) {
+     if (!quizStarted) {
+-      isCroatian = widget.isCroatian!;
+-      isSecondRound = widget.isSecondRound == true;
+       nextWord();
+       quizStarted = true;
+     }
+@@ -141,7 +141,7 @@ class _GamePageState extends State<GamePage> {
+ 
+   void nextWord() {
+     setState(() {
+-      currentWord = isCroatian
++      currentWord = widget.isCroatian
+           ? words[Random().nextInt(4)]
+           : words[Random().nextInt(4) + 4];
+       wordColor = wordColorMap.values.elementAt(Random().nextInt(4));
+@@ -159,21 +159,22 @@ class _GamePageState extends State<GamePage> {
+         incorrectAnswers++;
+       }
+       if (wordLeftCounter == 0) {
+-        navigateToResultPage(widget.timestamp);
++        navigateToResultPage();
+         return;
+       }
+       nextWord();
+     });
+   }
+ 
+-  Future<void> navigateToResultPage(String timestamp) async {
++  Future<void> navigateToResultPage() async {
+     double timeTaken =
+         (DateTime.now().difference(startTime).inMilliseconds) / 1000.0;
+-    int correctAnswersToPass = isCroatian ? correctAnswers : incorrectAnswers;
+-    int incorrectAnswersToPass = isCroatian ? incorrectAnswers : correctAnswers;
++    int correctAnswersToPass =
++        widget.isCroatian ? correctAnswers : incorrectAnswers;
++    int incorrectAnswersToPass =
++        widget.isCroatian ? incorrectAnswers : correctAnswers;
+     correctAnswers = 0;
+     incorrectAnswers = 0;
+-    isCroatian = !isCroatian;
+ 
+     Navigator.push(
+       context,
+@@ -182,9 +183,9 @@ class _GamePageState extends State<GamePage> {
+           timeTaken,
+           correctAnswersToPass,
+           incorrectAnswersToPass,
+-          isCroatian,
+-          isSecondRound,
+-          timestamp,
++          !widget.isCroatian,
++          widget.isSecondRound,
++          widget.timestamp,
+         ),
+       ),
+     );
+diff --git a/lib/pages/home.dart b/lib/pages/home.dart
+index 048d5b1..7700e17 100644
+--- a/lib/pages/home.dart
++++ b/lib/pages/home.dart
+@@ -15,12 +15,10 @@ class HomePage extends StatefulWidget {
+ 
+ class _HomePageState extends State<HomePage> {
+   int currentPage = 0;
+-  late String timestamp;
+ 
+   @override
+   void initState() {
+     super.initState();
+-    timestamp = DateFormat('ddHHmmss').format(DateTime.now());
+   }
+ 
+   final user = FirebaseAuth.instance.currentUser!;
+@@ -175,12 +173,16 @@ class _HomePageState extends State<HomePage> {
+                       TextButton(
+                         child: Text('OK'),
+                         onPressed: () {
++                          var timestamp =
++                              DateFormat('ddHHmmss').format(DateTime.now());
+                           Navigator.of(context).pop();
+                           Navigator.push(
+                             context,
+                             MaterialPageRoute(
+-                                builder: (context) =>
+-                                    GamePage(isCroatian: isCroatian, timestamp:timestamp)),
++                                builder: (context) => GamePage(
++                                    isCroatian: isCroatian,
++                                    isSecondRound: false,
++                                    timestamp: timestamp)),
+                           );
+                         },
+                       ),
+-- 
+2.43.0
+

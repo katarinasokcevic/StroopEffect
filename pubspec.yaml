@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   animated_splash_screen: ^1.1.0
+  shared_preferences: ^2.0.9
   http: ^0.13.3
   intl: ^0.17.0
   uuid: ^4.2.2

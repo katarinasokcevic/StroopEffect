@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../answer_data.dart';
 import '../result_data.dart';
 import 'authentication/auth.dart';
 import 'game.dart';
@@ -49,7 +48,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Image.asset(
-              'assets/logo.png',
+              '../assets/logo.png',
               height: 200,
             ),
             Center(
@@ -178,18 +177,14 @@ class _HomePageState extends State<HomePage> {
                           var timestamp =
                               DateFormat('ddHHmmss').format(DateTime.now());
                           var resultData = ResultData(user.uid, timestamp);
-                          List<AnswerData> answers = [];
-
                           Navigator.of(context).pop();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => GamePage(
-                                      isCroatian: isCroatian,
-                                      isSecondRound: false,
-                                      resultData: resultData,
-                                      answers: answers,
-                                    )),
+                                    isCroatian: isCroatian,
+                                    isSecondRound: false,
+                                    resultData: resultData)),
                           );
                         },
                       ),
