@@ -61,6 +61,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             ),
             DataTable(
 <<<<<<< HEAD
+<<<<<<< HEAD
               columnSpacing: 35.0,
               columns: const <DataColumn>[
                 DataColumn(
@@ -140,6 +141,32 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           'Time',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
+=======
+                    columns: const <DataColumn>[
+                      DataColumn(
+                        label: Text(
+                          'Ranking',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Name',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Correct\nanswers',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Time',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+>>>>>>> parent of f2ed546 (both results saved)
                       ),
                     ],
                     rows: allData.asMap().entries.map((entry) {
@@ -154,6 +181,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         ],
                       );
                     }).take(10).toList(),
+<<<<<<< HEAD
+>>>>>>> parent of f2ed546 (both results saved)
+=======
 >>>>>>> parent of f2ed546 (both results saved)
             ),
             const SizedBox(width: 30),
