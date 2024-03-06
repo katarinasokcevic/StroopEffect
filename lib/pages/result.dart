@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/result_data.dart';
 import '../answer_data.dart';
+import '../base_scaffold.dart';
 import 'game.dart';
 import 'leaderboard.dart';
 
@@ -22,8 +23,8 @@ class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     uploadUserResults(resultData, timeTaken, correctAnswers, isEnglish);
-    return Scaffold(
-      body: Center(
+    return BaseScaffold(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -59,9 +60,10 @@ class ResultPage extends StatelessWidget {
                         _showNameInputDialog(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.pink,
+                        backgroundColor: Colors.pink,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.all(25),
                       ),
@@ -81,9 +83,10 @@ class ResultPage extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.pink,
+                        backgroundColor: Colors.pink,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.all(25),
                       ),
@@ -115,9 +118,10 @@ class ResultPage extends StatelessWidget {
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.pink,
+                backgroundColor: Colors.pink,
+                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.all(25),
               ),

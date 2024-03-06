@@ -3,6 +3,7 @@ import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/pages/result.dart';
 import 'dart:math';
 import '../answer_data.dart';
+import '../base_scaffold.dart';
 import '../result_data.dart';
 
 const wordsCount = 10;
@@ -62,9 +63,7 @@ class _GamePageState extends State<GamePage> {
       quizStarted = true;
     }
 
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
+    return BaseScaffold(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,9 +100,13 @@ class _GamePageState extends State<GamePage> {
                   children: colors
                       .take(2)
                       .map((color) => Expanded(
-                            child: TextButton(
-                              style:
-                                  TextButton.styleFrom(backgroundColor: color),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                               onPressed: () {
                                 _handleAnswer(color);
                               },
@@ -118,9 +121,13 @@ class _GamePageState extends State<GamePage> {
                       .skip(2)
                       .take(2)
                       .map((color) => Expanded(
-                            child: TextButton(
-                              style:
-                                  TextButton.styleFrom(backgroundColor: color),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                               onPressed: () {
                                 _handleAnswer(color);
                               },
@@ -133,7 +140,6 @@ class _GamePageState extends State<GamePage> {
             ),
           ],
         ),
-      ),
     );
   }
 

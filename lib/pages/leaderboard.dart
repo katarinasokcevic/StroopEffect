@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../base_scaffold.dart';
 import 'home.dart';
 
 class LeaderboardPage extends StatefulWidget {
@@ -19,8 +20,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return BaseScaffold(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -33,9 +34,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     fetchCroatianData();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.pink,
+                    backgroundColor: Colors.pink,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(25),
                   ),
@@ -48,9 +50,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     fetchEnglishData();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.pink,
+                    backgroundColor: Colors.pink,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(25),
                   ),
@@ -59,6 +62,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               ],
             ),
             DataTable(
+              columnSpacing: 30.0,
               columns: const <DataColumn>[
                 DataColumn(
                   label: Text(
@@ -100,8 +104,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           ),
                         ),
                         DataCell(Text(playerData['name'])),
-                        DataCell(Text(
-                            '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}')),
+                        DataCell(Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                              '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
+                        )),
                         DataCell(Text(
                             '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
                       ],
@@ -119,9 +126,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.pink,
+                backgroundColor: Colors.pink,
+                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.all(25),
               ),
