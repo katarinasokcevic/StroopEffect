@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../base_scaffold.dart';
 import 'home.dart';
 
 class LeaderboardPage extends StatefulWidget {
@@ -20,8 +21,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return BaseScaffold(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -35,8 +36,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(25),
                   ),
@@ -50,8 +52,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(25),
                   ),
@@ -60,45 +63,61 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               ],
             ),
             DataTable(
-                    columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Ranking',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+              columnSpacing: 30.0,
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Text(
+                    'Ranking',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Name',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Correct\nanswers',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Time',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+              rows: allData
+                  .asMap()
+                  .entries
+                  .map((entry) {
+                    int index = entry.key;
+                    Map<String, dynamic> playerData = entry.value;
+                    return DataRow(
+                      cells: <DataCell>[
+                        DataCell(
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text('${index + 1}.'),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Correct\nanswers',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Time',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
+                        DataCell(Text(playerData['name'])),
+                        DataCell(Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                              '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
+                        )),
+                        DataCell(Text(
+                            '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
+                      ],
+                    );
+                  })
+                  .take(10)
+                  .toList(),
 
-                    rows: allData.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      Map<String, dynamic> playerData = entry.value;
-                      return DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('${index + 1}.')),
-                          DataCell(Text(playerData['name'])),
-                          DataCell(Text('${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}')),
-                          DataCell(Text('${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
-                        ],
-                      );
-                    }).take(10).toList(),
             ),
             const SizedBox(width: 30),
             ElevatedButton(
@@ -110,8 +129,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.pink,
+                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.all(25),
               ),

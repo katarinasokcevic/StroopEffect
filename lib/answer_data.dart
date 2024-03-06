@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class QuestionResult {
+class AnswerData {
   final int questionNumber;
   final Color displayedColor;
   final Color selectedColor;
@@ -8,7 +8,7 @@ class QuestionResult {
   final bool isCorrect;
   final double timeTaken;
 
-  QuestionResult({
+  AnswerData({
     required this.questionNumber,
     required this.displayedColor,
     required this.selectedColor,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/pages/result.dart';
-import 'package:stroop_effect/question_result.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'dart:math';
+import '../answer_data.dart';
+import '../base_scaffold.dart';
 import '../result_data.dart';
 
 const wordsCount = 10;
@@ -26,7 +27,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  List<QuestionResult> questionResults = [];
+  List<AnswerData> questionResults = [];
   late String currentWord = '';
   late Color currentColor;
   late Color wordColor = Colors.transparent;
@@ -60,9 +61,7 @@ class _GamePageState extends State<GamePage> {
       quizStarted = true;
     }
 
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
+    return BaseScaffold(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,9 +98,13 @@ class _GamePageState extends State<GamePage> {
                   children: colors
                       .take(2)
                       .map((color) => Expanded(
-                            child: TextButton(
-                              style:
-                                  TextButton.styleFrom(backgroundColor: color),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                               onPressed: () {
                                 _handleAnswer(color);
                               },
@@ -116,9 +119,13 @@ class _GamePageState extends State<GamePage> {
                       .skip(2)
                       .take(2)
                       .map((color) => Expanded(
-                            child: TextButton(
-                              style:
-                                  TextButton.styleFrom(backgroundColor: color),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                               onPressed: () {
                                 _handleAnswer(color);
                               },
@@ -131,7 +138,6 @@ class _GamePageState extends State<GamePage> {
             ),
           ],
         ),
-      ),
     );
   }
 
@@ -158,7 +164,7 @@ class _GamePageState extends State<GamePage> {
       double timeTaken =
           (DateTime.now().difference(questionStartTime).inMilliseconds) /
               1000.0;
-      questionResults.add(QuestionResult(
+      questionResults.add(AnswerData(
         questionNumber: currentQuestionNumber++,
         displayedColor: wordColor,
         selectedColor: selectedColor,

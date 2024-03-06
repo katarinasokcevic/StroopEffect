@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../../base_scaffold.dart';
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key, required this.onTap});
 
@@ -84,9 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
+    return BaseScaffold(
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -244,7 +244,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
-      ),
     );
   }
 }

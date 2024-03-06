@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:stroop_effect/question_result.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/result_data.dart';
+import '../answer_data.dart';
+import '../base_scaffold.dart';
 import 'game.dart';
 import 'leaderboard.dart';
 
@@ -13,17 +14,16 @@ class ResultPage extends StatelessWidget {
   final bool isEnglish;
   final bool bothLanguagesPlayed;
   final ResultData resultData;
-  final List<QuestionResult> questionResults;
+  final List<AnswerData> questionResults;
 
   const ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
       this.isEnglish, this.bothLanguagesPlayed, this.resultData, this.questionResults, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    uploadUserResults(
-        resultData, timeTaken, correctAnswers, isEnglish);
-    return Scaffold(
-      body: Center(
+    uploadUserResults(resultData, timeTaken, correctAnswers, isEnglish);
+    return BaseScaffold(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -56,8 +56,9 @@ class ResultPage extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.all(25),
                       ),
@@ -75,8 +76,9 @@ class ResultPage extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.all(25),
                       ),
@@ -108,8 +110,9 @@ class ResultPage extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.pink,
+                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.all(25),
               ),

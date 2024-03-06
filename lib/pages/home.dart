@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../answer_data.dart';
+import '../base_scaffold.dart';
 import '../result_data.dart';
 import 'authentication/auth.dart';
 import 'game.dart';
@@ -30,9 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
+    return BaseScaffold(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,8 +48,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Image.asset(
-              '../assets/logo.png',
-              height: 200,
+              'assets/logo.png',
+              height: 180,
             ),
             Center(
               child: Padding(
@@ -75,6 +75,7 @@ class _HomePageState extends State<HomePage> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: fontSize,
+                          fontWeight: FontWeight.w400,
                           color: Colors.black,
                         ),
                       );
@@ -100,7 +101,10 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink,
+                  foregroundColor: Colors.white, backgroundColor: Colors.pink, // Text color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10), // Circular shape
+                  ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 20,
@@ -116,12 +120,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
     );
   }
 
   Widget buildDialog(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10), // Circular shape
+      ),
       title: const Text(
         "Game Rules",
         style: TextStyle(
@@ -166,13 +172,21 @@ class _HomePageState extends State<HomePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // Circular shape
+                    ),
                     title: const Text('Game Start'),
                     content: Text(
                       'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
+                      style: const TextStyle(fontSize: 16),
                     ),
                     actions: [
                       TextButton(
-                        child: const Text('OK'),
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10), // Circular shape
+                          ),
+                        ),
                         onPressed: () {
                           var timestamp =
                               DateFormat('ddHHmmss').format(DateTime.now());
@@ -187,6 +201,10 @@ class _HomePageState extends State<HomePage> {
                                     resultData: resultData)),
                           );
                         },
+                        child: const Text(
+                          'OK',
+                          style: TextStyle(color: Colors.blue),
+                        ),
                       ),
                     ],
                   );
@@ -194,11 +212,13 @@ class _HomePageState extends State<HomePage> {
               );
             }
 
-            Navigator.pop(context); // Close the AlertDialog
-
+            Navigator.pop(context);
             _showGameStartDialog();
           },
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
+          style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Colors.pink, // Text color
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10), // Circular shape
+            ),),
           child: const Text(
             "Start",
             style: TextStyle(
