@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.pink,
+                  backgroundColor: Colors.pink,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 20,

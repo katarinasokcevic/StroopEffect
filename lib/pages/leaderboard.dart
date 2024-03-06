@@ -34,7 +34,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     fetchCroatianData();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.pink,
+                    backgroundColor: Colors.pink,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -49,7 +49,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     fetchEnglishData();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.pink,
+                    backgroundColor: Colors.pink,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -60,63 +60,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               ],
             ),
             DataTable(
-<<<<<<< HEAD
-<<<<<<< HEAD
-              columnSpacing: 35.0,
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Text(
-                    'Ranking',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Name',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Correct\nanswers',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Time',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-              rows: allData
-                  .asMap()
-                  .entries
-                  .map((entry) {
-                    int index = entry.key;
-                    Map<String, dynamic> playerData = entry.value;
-                    return DataRow(
-                      cells: <DataCell>[
-                        DataCell(
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text('${index + 1}.'),
-                          ),
-                        ),
-                        DataCell(Text(playerData['name'])),
-                        DataCell(Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                              '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
-                        )),
-                        DataCell(Text(
-                            '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
-                      ],
-                    );
-                  })
-                  .take(10)
-                  .toList(),
-=======
                     columns: const <DataColumn>[
                       DataColumn(
                         label: Text(
@@ -141,34 +84,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           'Time',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-=======
-                    columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Ranking',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Correct\nanswers',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Time',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
->>>>>>> parent of f2ed546 (both results saved)
                       ),
                     ],
+
                     rows: allData.asMap().entries.map((entry) {
                       int index = entry.key;
                       Map<String, dynamic> playerData = entry.value;
@@ -181,10 +99,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         ],
                       );
                     }).take(10).toList(),
-<<<<<<< HEAD
->>>>>>> parent of f2ed546 (both results saved)
-=======
->>>>>>> parent of f2ed546 (both results saved)
             ),
             const SizedBox(width: 30),
             ElevatedButton(
@@ -195,7 +109,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.pink,
+                backgroundColor: Colors.pink,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

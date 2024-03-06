@@ -55,7 +55,7 @@ class ResultPage extends StatelessWidget {
                         _showNameInputDialog(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.pink,
+                        backgroundColor: Colors.pink,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -74,7 +74,7 @@ class ResultPage extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.pink,
+                        backgroundColor: Colors.pink,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -107,7 +107,7 @@ class ResultPage extends StatelessWidget {
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.pink,
+                backgroundColor: Colors.pink,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
