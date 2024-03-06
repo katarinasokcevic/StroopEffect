@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/pages/result.dart';
-import 'package:stroop_effect/color_map.dart';
 import 'dart:math';
 import '../answer_data.dart';
 import '../base_scaffold.dart';

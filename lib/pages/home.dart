@@ -33,93 +33,94 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: Text(
-                "The game Stroop effect",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: Text(
+              "The game Stroop effect",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Image.asset(
-              'assets/logo.png',
-              height: 180,
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
+          ),
+          Image.asset(
+            'assets/logo.png',
+            height: 180,
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      bool isMobile = constraints.maxWidth > 600;
-                      double fontSize = isMobile ? 23 : 16; // Example values
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    bool isMobile = constraints.maxWidth > 600;
+                    double fontSize = isMobile ? 23 : 16; // Example values
 
-                      return Text(
-                        "This application delves into the phenomenon known as the Stroop effect, an intriguing cognitive occurrence involving the interplay of colors and words in the brain.\n"
-                        "Objective is to observe user interactions, garner insights into cognitive processes, and contribute to a comprehensive understanding of cross-cultural influences on the Stroop effect.\n"
-                        "All acquired data will be meticulously documented and disseminated, aiming \n to enrich the collective understanding of cognitive phenomena.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: fontSize,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      );
-                    },
-                  ),
+                    return Text(
+                      "This application delves into the phenomenon known as the Stroop effect, an intriguing cognitive occurrence involving the interplay of colors and words in the brain.\n"
+                      "Objective is to observe user interactions, garner insights into cognitive processes, and contribute to a comprehensive understanding of cross-cultural influences on the Stroop effect.\n"
+                      "All acquired data will be meticulously documented and disseminated, aiming \n to enrich the collective understanding of cognitive phenomena.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (user == null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AuthPage()),
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) => buildDialog(context),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.pink, // Text color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10), // Circular shape
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 20,
-                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                if (user == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AuthPage()),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => buildDialog(context),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.pink,
+                // Text color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10), // Circular shape
                 ),
-                child: const Text(
-                  "Start",
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 20,
+                ),
+              ),
+              child: const Text(
+                "Start",
+                style: TextStyle(
+                  fontSize: 30,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -184,7 +185,8 @@ class _HomePageState extends State<HomePage> {
                       TextButton(
                         style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10), // Circular shape
+                            borderRadius:
+                                BorderRadius.circular(10), // Circular shape
                           ),
                         ),
                         onPressed: () {
@@ -215,10 +217,14 @@ class _HomePageState extends State<HomePage> {
             Navigator.pop(context);
             _showGameStartDialog();
           },
-          style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Colors.pink, // Text color
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.pink,
+            // Text color
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10), // Circular shape
-            ),),
+            ),
+          ),
           child: const Text(
             "Start",
             style: TextStyle(

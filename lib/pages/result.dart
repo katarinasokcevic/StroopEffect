@@ -14,10 +14,10 @@ class ResultPage extends StatelessWidget {
   final bool isEnglish;
   final bool bothLanguagesPlayed;
   final ResultData resultData;
-  final List<AnswerData> questionResults;
+  final List<AnswerData> answerResults;
 
   const ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
-      this.isEnglish, this.bothLanguagesPlayed, this.resultData, this.questionResults, {super.key});
+      this.isEnglish, this.bothLanguagesPlayed, this.resultData, this.answerResults, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +150,7 @@ class ResultPage extends StatelessWidget {
 
   Future<void> saveResult() async {
     var db = FirebaseFirestore.instance;
-     List<Map<String, dynamic>> questionResultsData = questionResults.map((result) {
+     List<Map<String, dynamic>> answersData = answerResults.map((result) {
        return {
          'questionNumber': result.questionNumber,
          'displayedColor': colorToString(result.displayedColor),
@@ -169,7 +169,7 @@ class ResultPage extends StatelessWidget {
       'correctEnglish': resultData.correctEnglish,
       'correctCroatian': resultData.correctCroatian,
       'name': resultData.name,
-      'questionResults': questionResultsData,
+      'answers': answersData,
 
     };
     await db.collection("results").doc(resultData.timestamp).set(dbData);
