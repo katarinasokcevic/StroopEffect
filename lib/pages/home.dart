@@ -193,6 +193,7 @@ class _HomePageState extends State<HomePage> {
                           var timestamp =
                               DateFormat('ddHHmmss').format(DateTime.now());
                           var resultData = ResultData(user.uid, timestamp);
+                          List<AnswerData> answers = [];
                           Navigator.of(context).pop();
                           Navigator.push(
                             context,
@@ -200,7 +201,9 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => GamePage(
                                     isCroatian: isCroatian,
                                     isSecondRound: false,
-                                    resultData: resultData)),
+                                    resultData: resultData,
+                                    answers:answers,
+                                    )),
                           );
                         },
                         child: const Text(

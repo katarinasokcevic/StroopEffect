@@ -14,10 +14,10 @@ class ResultPage extends StatelessWidget {
   final bool isEnglish;
   final bool bothLanguagesPlayed;
   final ResultData resultData;
-  final List<AnswerData> answerResults;
+  final List<AnswerData> answers;
 
   const ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
-      this.isEnglish, this.bothLanguagesPlayed, this.resultData, this.answerResults, {super.key});
+      this.isEnglish, this.bothLanguagesPlayed, this.resultData, this.answers, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class ResultPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => GamePage(
-                                  isCroatian: isEnglish, isSecondRound: true, resultData: resultData)),
+                                  isCroatian: isEnglish, isSecondRound: true, resultData: resultData, answers: answers)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -150,16 +150,17 @@ class ResultPage extends StatelessWidget {
 
   Future<void> saveResult() async {
     var db = FirebaseFirestore.instance;
-     List<Map<String, dynamic>> answersData = answerResults.map((result) {
-       return {
-         'questionNumber': result.questionNumber,
-         'displayedColor': colorToString(result.displayedColor),
-         'selectedColor': colorToString(result.selectedColor),
-         'isCroatian': result.isCroatian ? "croatian" : "english",
-         'isCorrect' : result.isCorrect ? "correct" : "incorrect",
-         'timeTaken': result.timeTaken,
-       };
-     }).toList();
+    List<Map<String, dynamic>> answersData = answers.map((result) {
+      return {
+        'questionNumber': result.questionNumber,
+        'displayWord': result.displayedWord,
+        'displayedColor': colorToString(result.displayedColor),
+        'selectedColor': colorToString(result.selectedColor),
+        'isCroatian': result.isCroatian ? "croatian" : "english",
+        'isCorrect': result.isCorrect ? "correct" : "incorrect",
+        'timeTaken': result.timeTaken,
+      };
+    }).toList();
 
     var dbData = <String, dynamic>{
       'userId': resultData.userId,

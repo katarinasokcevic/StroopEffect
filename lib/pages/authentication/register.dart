@@ -29,23 +29,39 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     try {
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-      } else {
-        showErrorMessage("Passwords don't match");
+      if (passwordController.text != confirmPasswordController.text) {
+        if (context.mounted) {
+          Navigator.pop(context);
+          showErrorMessage("Passwords don't match");
+        }
+        return;
       }
+
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
 
       if (context.mounted) {
         Navigator.pop(context);
       }
     } on FirebaseAuthException catch (e) {
+      String message;
+      switch (e.code) {
+        case 'invalid-email':
+          message = "Invalid email";
+          break;
+        case 'weak-password':
+          message = "Weak password";
+          break;
+        default:
+          message = e.message ?? "An error occurred";
+      }
+
       if (context.mounted) {
         Navigator.pop(context);
+        showErrorMessage(message);
       }
-      showErrorMessage(e.code);
     }
   }
 
