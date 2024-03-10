@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                 child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     bool isMobile = constraints.maxWidth > 600;
-                    double fontSize = isMobile ? 23 : 16; // Example values
+                    double fontSize = isMobile ? 23 : 16;
 
                     return Text(
                       "This application delves into the phenomenon known as the Stroop effect, an intriguing cognitive occurrence involving the interplay of colors and words in the brain.\n"
@@ -102,9 +102,8 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.pink,
-                // Text color
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10), // Circular shape
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
@@ -127,7 +126,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildDialog(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Circular shape
+        borderRadius: BorderRadius.circular(10),
       ),
       title: const Text(
         "Game Rules",
@@ -164,6 +163,27 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       actions: [
+        OutlinedButton(
+          onPressed: () {
+            _showScreenshotPreviewDialog(context);
+          },
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(color: Colors.black),
+            ),
+            backgroundColor: Colors.transparent,
+          ),
+          child: Text(
+            'Preview',
+            style: TextStyle(
+              color: Colors.pink,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+
         ElevatedButton(
           onPressed: () {
             var r = Random();
@@ -174,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10), // Circular shape
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     title: const Text('Game Start'),
                     content: Text(
@@ -184,9 +204,11 @@ class _HomePageState extends State<HomePage> {
                     actions: [
                       TextButton(
                         style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.pink,
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(10), // Circular shape
+                                BorderRadius.circular(10),
                           ),
                         ),
                         onPressed: () {
@@ -199,16 +221,16 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => GamePage(
-                                    isCroatian: isCroatian,
-                                    isSecondRound: false,
-                                    resultData: resultData,
-                                    answers:answers,
+                                      isCroatian: isCroatian,
+                                      isSecondRound: false,
+                                      resultData: resultData,
+                                      answers: answers,
                                     )),
                           );
                         },
                         child: const Text(
                           'OK',
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ],
@@ -223,9 +245,8 @@ class _HomePageState extends State<HomePage> {
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
             backgroundColor: Colors.pink,
-            // Text color
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10), // Circular shape
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
           child: const Text(
@@ -236,6 +257,44 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showScreenshotPreviewDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: const Text(
+            'Preview',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Image.asset('assets/screenshot.jpg'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.pink,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'OK',
+                style: TextStyle(color: Colors.white),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }

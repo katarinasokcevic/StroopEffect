@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.pink,
+          backgroundColor: Colors.deepPurple,
           title: Center(
             child: Text(
               message,
@@ -153,8 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
 
-                const SizedBox(height: 10),
-                const SizedBox(height: 25),
+                const SizedBox(height: 35),
 
                 LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
