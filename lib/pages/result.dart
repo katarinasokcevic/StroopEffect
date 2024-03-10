@@ -11,17 +11,17 @@ class ResultPage extends StatelessWidget {
   final double timeTaken;
   final int correctAnswers;
   final int incorrectAnswers;
-  final bool isEnglish;
+  final bool isCroatian;
   final bool bothLanguagesPlayed;
   final ResultData resultData;
   final List<AnswerData> answers;
 
   const ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
-      this.isEnglish, this.bothLanguagesPlayed, this.resultData, this.answers, {super.key});
+      this.isCroatian, this.bothLanguagesPlayed, this.resultData, this.answers, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    uploadUserResults(resultData, timeTaken, correctAnswers, isEnglish);
+    uploadUserResults(resultData, timeTaken, correctAnswers, isCroatian);
     return BaseScaffold(
       child: Center(
         child: Column(
@@ -36,7 +36,7 @@ class ResultPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Language: ${isEnglish ? 'English' : 'Croatian'}',
+                  Text('Language: ${isCroatian ? 'Croatian' : 'English'}',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Text('Time taken: $timeTaken seconds',
@@ -71,7 +71,7 @@ class ResultPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => GamePage(
-                                  isCroatian: isEnglish, isSecondRound: true, resultData: resultData, answers: answers)),
+                                  isCroatian: !isCroatian, isSecondRound: true, resultData: resultData, answers: answers)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -82,7 +82,7 @@ class ResultPage extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.all(25),
                       ),
-                      child: const Text('Continue to the second language'),
+                      child: Text('Continue to ${isCroatian ? 'English' : 'Croatian'}'),
                     ),
                 ],
               ),
@@ -138,13 +138,13 @@ class ResultPage extends StatelessWidget {
   }
 
   Future<void> uploadUserResults(ResultData resultData, double timeTaken,
-      int correctAnswers, bool isEnglish) async {
-    if (isEnglish) {
-      resultData.correctEnglish = correctAnswers;
-      resultData.timeEnglish = timeTaken;
-    } else {
+      int correctAnswers, bool isCroatian) async {
+    if (isCroatian) {
       resultData.correctCroatian = correctAnswers;
       resultData.timeCroatian = timeTaken;
+    } else {
+      resultData.correctEnglish = correctAnswers;
+      resultData.timeEnglish = timeTaken;
     }
   }
 

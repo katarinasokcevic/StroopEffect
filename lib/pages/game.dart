@@ -200,7 +200,7 @@ class _GamePageState extends State<GamePage> {
           timeTaken,
           correctAnswersToPass,
           incorrectAnswersToPass,
-          !widget.isCroatian,
+          widget.isCroatian,
           widget.isSecondRound,
           widget.resultData,
           answers,
