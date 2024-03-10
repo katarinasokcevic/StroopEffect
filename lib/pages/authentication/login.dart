@@ -15,6 +15,83 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  @override
+  Widget build(BuildContext context) {
+    return BaseScaffold(
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "The Stroop Effect",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 50),
+              const Text(
+                'Welcome back!',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 25),
+              _buildTextField(
+                controller: emailController,
+                hintText: 'Email',
+                obscureText: false,
+              ),
+              const SizedBox(height: 10),
+              _buildTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+              ),
+              const SizedBox(height: 35),
+              _buildSignInButton(),
+              const SizedBox(height: 80),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Not a member?',
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                  const SizedBox(width: 4),
+                  GestureDetector(
+                    onTap: widget.onTap,
+                    child: const Text(
+                      'Register now',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void signUserIn() async {
     showDialog(
       context: context,
@@ -24,7 +101,6 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
-
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
@@ -38,7 +114,6 @@ class _LoginPageState extends State<LoginPage> {
       if (context.mounted) {
         Navigator.pop(context);
       }
-
       showErrorMessage(e.code);
     }
   }
@@ -64,7 +139,8 @@ class _LoginPageState extends State<LoginPage> {
     double width = maxWidth;
     if (MediaQuery.of(context).size.shortestSide < 600) {
       width *= 0.8;
-    } else if (MediaQuery.of(context).size.shortestSide >= 600 && MediaQuery.of(context).size.shortestSide < 1200) {
+    } else if (MediaQuery.of(context).size.shortestSide >= 600 &&
+        MediaQuery.of(context).size.shortestSide < 1200) {
       width *= 0.4;
     } else {
       width *= 0.15;
@@ -77,152 +153,55 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BaseScaffold(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "The Stroop Effect",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    bool obscureText = false,
+  }) {
+    return _buildResponsiveContainer(
+      MediaQuery.of(context).size.width,
+      TextField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade400),
+          ),
+          fillColor: Colors.grey.shade200,
+          filled: true,
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey[500]),
+        ),
+      ),
+    );
+  }
 
-                const SizedBox(height: 50),
-                const Text(
-                  'Welcome back!',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-                LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    return _buildResponsiveContainer(
-                      constraints.maxWidth,
-                      TextField(
-                          controller: emailController,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade400),
-                            ),
-                            fillColor: Colors.grey.shade200,
-                            filled: true,
-                            hintText: 'Email',
-                            hintStyle: TextStyle(color: Colors.grey[500]),
-                          ),
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 10),
-                LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    return _buildResponsiveContainer(
-                      constraints.maxWidth,
-                      TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade400),
-                            ),
-                            fillColor: Colors.grey.shade200,
-                            filled: true,
-                            hintText: 'Password',
-                            hintStyle: TextStyle(color: Colors.grey[500]),
-                          ),
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 35),
-
-                LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    return _buildResponsiveContainer(
-                      constraints.maxWidth,
-                      GestureDetector(
-                          onTap: signUserIn,
-                          child: Container(
-                            padding: const EdgeInsets.all(25),
-                            decoration: BoxDecoration(
-                              color: Colors.pink,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 80),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-                    const SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: const Text(
-                        'Register now',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
+  Widget _buildSignInButton() {
+    return _buildResponsiveContainer(
+      MediaQuery.of(context).size.width,
+      GestureDetector(
+        onTap: signUserIn,
+        child: Container(
+          padding: const EdgeInsets.all(25),
+          decoration: BoxDecoration(
+            color: Colors.pink,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Center(
+            child: Text(
+              "Sign In",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
+      ),
     );
   }
 }

@@ -1,12 +1,10 @@
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../answer_data.dart';
 import '../base_scaffold.dart';
 import '../result_data.dart';
-import 'authentication/auth.dart';
 import 'game.dart';
 
 class HomePage extends StatefulWidget {
@@ -87,17 +85,10 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
-                if (user == null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AuthPage()),
-                  );
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) => buildDialog(context),
-                  );
-                }
+                showDialog(
+                  context: context,
+                  builder: (context) => buildDialog(context),
+                );
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -183,64 +174,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-
         ElevatedButton(
           onPressed: () {
-            var r = Random();
-            var isCroatian = r.nextBool();
-            void _showGameStartDialog() {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    title: const Text('Game Start'),
-                    content: Text(
-                      'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    actions: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.pink,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {
-                          var timestamp =
-                              DateFormat('ddHHmmss').format(DateTime.now());
-                          var resultData = ResultData(user.uid, timestamp);
-                          List<AnswerData> answers = [];
-                          Navigator.of(context).pop();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GamePage(
-                                      isCroatian: isCroatian,
-                                      isSecondRound: false,
-                                      resultData: resultData,
-                                      answers: answers,
-                                    )),
-                          );
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-
+            var isCroatian = Random().nextBool();
             Navigator.pop(context);
-            _showGameStartDialog();
+            _showGameStartDialog(context, isCroatian);
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
@@ -257,6 +195,56 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showGameStartDialog(BuildContext context, bool isCroatian) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: const Text('Game Start'),
+          content: Text(
+            'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.pink,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                var timestamp = DateFormat('ddHHmmss').format(DateTime.now());
+                var resultData = ResultData(user.uid, timestamp);
+                List<AnswerData> answers = [];
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GamePage(
+                      isCroatian: isCroatian,
+                      isSecondRound: false,
+                      resultData: resultData,
+                      answers: answers,
+                    ),
+                  ),
+                );
+              },
+              child: const Text(
+                'OK',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
