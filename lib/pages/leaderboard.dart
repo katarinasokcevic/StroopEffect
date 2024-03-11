@@ -30,121 +30,124 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
               } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ElevatedButton(
-                          onPressed: () async {
-                            isCroatian = true;
-                            fetchCroatianData();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pink,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () async {
+                              isCroatian = true;
+                              fetchCroatianData();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.pink,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.all(25),
                             ),
-                            padding: const EdgeInsets.all(25),
+                            child: const Text('Croatian'),
                           ),
-                          child: const Text('Croatian'),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () async {
-                            isCroatian = false;
-                            fetchEnglishData();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pink,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: () async {
+                              isCroatian = false;
+                              fetchEnglishData();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.pink,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.all(25),
                             ),
-                            padding: const EdgeInsets.all(25),
+                            child: const Text('English'),
                           ),
-                          child: const Text('English'),
-                        ),
-                      ],
-                    ),
-                    DataTable(
-                      columnSpacing: 30.0,
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Text(
-                            'Ranking',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Name',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Correct\nanswers',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Time',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                      rows: allData
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                            int index = entry.key;
-                            Map<String, dynamic> playerData = entry.value;
-                            return DataRow(
-                              cells: <DataCell>[
-                                DataCell(
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Text('${index + 1}.'),
-                                  ),
-                                ),
-                                DataCell(Text(playerData['name'])),
-                                DataCell(Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                      '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
-                                )),
-                                DataCell(Text(
-                                    '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
-                              ],
-                            );
-                          })
-                          .take(10)
-                          .toList(),
-                    ),
-                    const SizedBox(width: 30),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.all(25),
+                        ],
                       ),
-                      child: const Text('Go to Menu'),
-                    ),
-                  ],
+                      DataTable(
+                        columnSpacing: 30.0,
+                        columns: const <DataColumn>[
+                          DataColumn(
+                            label: Text(
+                              'Ranking',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Name',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Correct\nanswers',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Time',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                        rows: allData
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                              int index = entry.key;
+                              Map<String, dynamic> playerData = entry.value;
+                              return DataRow(
+                                cells: <DataCell>[
+                                  DataCell(
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Text('${index + 1}.'),
+                                    ),
+                                  ),
+                                  DataCell(Text(playerData['name'])),
+                                  DataCell(Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                        '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
+                                  )),
+                                  DataCell(Text(
+                                      '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
+                                ],
+                              );
+                            })
+                            .take(10)
+                            .toList(),
+                      ),
+                      const SizedBox(width: 30),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.all(25),
+                        ),
+                        child: const Text('Go to Menu'),
+                      ),
+                    ],
+                  ),
                 );
               }
             },
