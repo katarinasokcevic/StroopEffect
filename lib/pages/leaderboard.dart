@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import '../base_scaffold.dart';
 import 'home.dart';
 
@@ -31,7 +33,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 return CircularProgressIndicator();
               } else {
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 2.0),
+                  padding: const EdgeInsets.only(bottom: 10.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -49,7 +51,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              padding: const EdgeInsets.all(25),
+                              padding: const EdgeInsets.all(18),
                             ),
                             child: const Text('Croatian'),
                           ),
@@ -65,7 +67,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              padding: const EdgeInsets.all(25),
+                              padding: const EdgeInsets.all(18),
                             ),
                             child: const Text('English'),
                           ),
@@ -127,7 +129,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                             .take(10)
                             .toList(),
                       ),
-                      const SizedBox(width: 30),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -142,7 +143,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: const EdgeInsets.all(25),
+                          padding: const EdgeInsets.all(18),
                         ),
                         child: const Text('Go to Menu'),
                       ),
