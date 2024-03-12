@@ -92,17 +92,33 @@ class ResultPage extends StatelessWidget {
   }
 
   void _showNameInputDialog(BuildContext context) {
-    String name = '';
+    final _formKey = GlobalKey<FormState>();
+    String _name = '';
+
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Enter your first and last name for the leaderboard'),
-          content: TextField(
-            onChanged: (value) {
-              name = value;
-            },
-            decoration: const InputDecoration(hintText: "First and last name"),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(hintText: "First and last name"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Name is required';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _name = value;
+                  },
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             ElevatedButton(
@@ -115,16 +131,18 @@ class ResultPage extends StatelessWidget {
                 padding: const EdgeInsets.all(25),
               ),
               onPressed: () async {
-                resultData.name = name;
-                saveResult();
+                if (_formKey.currentState!.validate()) {
+                  resultData.name = _name;
+                  saveResult();
 
-                if (context.mounted) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LeaderboardPage(),
-                    ),
-                  );
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LeaderboardPage(),
+                      ),
+                    );
+                  }
                 }
               },
               child: const Text('Submit'),

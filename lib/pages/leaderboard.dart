@@ -37,98 +37,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          ElevatedButton(
-                            onPressed: () async {
-                              isCroatian = true;
-                              fetchCroatianData();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.pink,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.all(18),
-                            ),
-                            child: const Text('Croatian'),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: () async {
-                              isCroatian = false;
-                              fetchEnglishData();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.pink,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.all(18),
-                            ),
-                            child: const Text('English'),
-                          ),
-                        ],
-                      ),
-                      DataTable(
-                        columnSpacing: 30.0,
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                              'Ranking',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Name',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Correct\nanswers',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Time',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        rows: allData
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                              int index = entry.key;
-                              Map<String, dynamic> playerData = entry.value;
-                              return DataRow(
-                                cells: <DataCell>[
-                                  DataCell(
-                                    Container(
-                                      alignment: Alignment.center,
-                                      child: Text('${index + 1}.'),
-                                    ),
-                                  ),
-                                  DataCell(Text(playerData['name'])),
-                                  DataCell(Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                        '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
-                                  )),
-                                  DataCell(Text(
-                                      '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
-                                ],
-                              );
-                            })
-                            .take(10)
-                            .toList(),
-                      ),
+                      _buildLanguageButtons(),
+                      _buildDataTable(),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -154,6 +64,106 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          onPressed: () async {
+            isCroatian = true;
+            fetchCroatianData();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.pink,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(18),
+          ),
+          child: const Text('Croatian'),
+        ),
+        const SizedBox(width: 10),
+        ElevatedButton(
+          onPressed: () async {
+            isCroatian = false;
+            fetchEnglishData();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.pink,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(18),
+          ),
+          child: const Text('English'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDataTable() {
+    return FittedBox(
+      child: DataTable(
+        columnSpacing: 25.0,
+        columns: const <DataColumn>[
+          DataColumn(
+            label: Text(
+              'Ranking',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'Name',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'Correct\nanswers',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'Time',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+        rows: allData
+            .asMap()
+            .entries
+            .map((entry) {
+          int index = entry.key;
+          Map<String, dynamic> playerData = entry.value;
+          return DataRow(
+            cells: <DataCell>[
+              DataCell(
+                Container(
+                  alignment: Alignment.center,
+                  child: Text('${index + 1}.'),
+                ),
+              ),
+              DataCell(Text(playerData['name'])),
+              DataCell(Container(
+                alignment: Alignment.center,
+                child: Text(
+                    '${isCroatian ? playerData['correctCroatian'] : playerData['correctEnglish']}'),
+              )),
+              DataCell(Text(
+                  '${isCroatian ? playerData['timeCroatian'] : playerData['timeEnglish']} s')),
+            ],
+          );
+        })
+            .take(10)
+            .toList(),
       ),
     );
   }

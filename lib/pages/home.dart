@@ -65,9 +65,9 @@ class _HomePageState extends State<HomePage> {
                     child: LayoutBuilder(
                       builder:
                           (BuildContext context, BoxConstraints constraints) {
-                        bool isMobile = constraints.maxWidth > 600;
-                        double fontSize = isMobile ? 23 : 16;
-                        if (MediaQuery.of(context).size.height < 460 || MediaQuery.of(context).size.width < 300 ) {
+                        bool isMobile = constraints.maxWidth < 600;
+                        double fontSize = isMobile ? 16 : 23;
+                        if (MediaQuery.of(context).size.height < 460 || MediaQuery.of(context).size.width < 320 ) {
                           fontSize = 12;
                         }
 
@@ -124,6 +124,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildDialog(BuildContext context) {
+    bool isMobile = MediaQuery.of(context).size.height < 500;
+    double fontSize = isMobile ? 12 : 16;
+    double biggerSize = isMobile ? 16 : 20;
+
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -136,9 +140,9 @@ class _HomePageState extends State<HomePage> {
       ),
       content: RichText(
         textAlign: TextAlign.center,
-        text: const TextSpan(
+        text: TextSpan(
           style: TextStyle(
-            fontSize: 16,
+            fontSize: fontSize,
             color: Colors.black,
           ),
           children: [
@@ -150,7 +154,7 @@ class _HomePageState extends State<HomePage> {
             TextSpan(
               text: "RED",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: biggerSize,
                 color: Colors.blue,
                 fontWeight: FontWeight.bold,
               ),
