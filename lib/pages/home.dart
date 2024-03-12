@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../answer_data.dart';
 import '../base_scaffold.dart';
 import '../result_data.dart';
 import 'game.dart';
@@ -233,7 +232,6 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 var timestamp = DateFormat('ddHHmmss').format(DateTime.now());
                 var resultData = ResultData(user.uid, timestamp);
-                List<AnswerData> answers = [];
                 Navigator.of(context).pop();
                 Navigator.push(
                   context,
@@ -242,7 +240,6 @@ class _HomePageState extends State<HomePage> {
                       isCroatian: isCroatian,
                       isSecondRound: false,
                       resultData: resultData,
-                      answers: answers,
                     ),
                   ),
                 );

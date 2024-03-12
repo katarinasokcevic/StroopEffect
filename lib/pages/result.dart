@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/result_data.dart';
-import '../answer_data.dart';
 import '../base_scaffold.dart';
 import 'game.dart';
 import 'leaderboard.dart';
@@ -14,10 +13,9 @@ class ResultPage extends StatelessWidget {
   final bool isCroatian;
   final bool bothLanguagesPlayed;
   final ResultData resultData;
-  final List<AnswerData> answers;
 
   const ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
-      this.isCroatian, this.bothLanguagesPlayed, this.resultData, this.answers, {super.key});
+      this.isCroatian, this.bothLanguagesPlayed, this.resultData, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +69,7 @@ class ResultPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => GamePage(
-                                  isCroatian: !isCroatian, isSecondRound: true, resultData: resultData, answers: answers)),
+                                  isCroatian: !isCroatian, isSecondRound: true, resultData: resultData)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -150,7 +148,7 @@ class ResultPage extends StatelessWidget {
 
   Future<void> saveResult() async {
     var db = FirebaseFirestore.instance;
-    List<Map<String, dynamic>> answersData = answers.map((result) {
+    List<Map<String, dynamic>> answersData = resultData.answers.map((result) {
       return {
         'questionNumber': result.questionNumber,
         'displayWord': result.displayedWord,

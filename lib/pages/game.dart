@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stroop_effect/color_map.dart';
 import 'package:stroop_effect/pages/result.dart';
 import 'dart:math';
-import '../answer_data.dart';
 import '../base_scaffold.dart';
 import '../result_data.dart';
 
@@ -13,22 +12,19 @@ class GamePage extends StatefulWidget {
   final bool isCroatian;
   final bool isSecondRound;
   final ResultData resultData;
-  final List<AnswerData> answers;
 
-  const GamePage(
-      {Key? key,
-      required this.isCroatian,
-      required this.isSecondRound,
-      required this.resultData,
-      required this.answers,
-      }) : super(key: key);
+  const GamePage({
+    Key? key,
+    required this.isCroatian,
+    required this.isSecondRound,
+    required this.resultData,
+  }) : super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();
 }
 
 class _GamePageState extends State<GamePage> {
-  List<AnswerData> answers = [];
   late String currentWord = '';
   late Color currentColor;
   late Color wordColor = Colors.transparent;
@@ -48,7 +44,6 @@ class _GamePageState extends State<GamePage> {
     super.initState();
     words = wordColorMap.keys.toList();
     colors = wordColorMap.values.toList();
-    answers = List.from(widget.answers);
   }
 
   @override
@@ -64,82 +59,82 @@ class _GamePageState extends State<GamePage> {
     }
 
     return BaseScaffold(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: Text(
-                "The game Stroop effect",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: Text(
+              "The game Stroop effect",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                currentWord,
-                style: TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                  color: wordColor,
-                ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              currentWord,
+              style: TextStyle(
+                fontSize: 60,
+                fontWeight: FontWeight.bold,
+                color: wordColor,
               ),
             ),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: colors
-                      .take(2)
-                      .map((color) => Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                              onPressed: () {
-                                _handleAnswer(color);
-                              },
-                              child: Container(height: 70),
+          ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: colors
+                    .take(2)
+                    .map((color) => Expanded(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: color,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ))
-                      .toList(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: colors
-                      .skip(2)
-                      .take(2)
-                      .map((color) => Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                              onPressed: () {
-                                _handleAnswer(color);
-                              },
-                              child: Container(height: 70),
+                            onPressed: () {
+                              _handleAnswer(color);
+                            },
+                            child: Container(height: 70),
+                          ),
+                        ))
+                    .toList(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: colors
+                    .skip(2)
+                    .take(2)
+                    .map((color) => Expanded(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: color,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ))
-                      .toList(),
-                ),
-              ],
-            ),
-          ],
-        ),
+                            onPressed: () {
+                              _handleAnswer(color);
+                            },
+                            child: Container(height: 70),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -166,7 +161,7 @@ class _GamePageState extends State<GamePage> {
       double timeTaken =
           (DateTime.now().difference(questionStartTime).inMilliseconds) /
               1000.0;
-      answers.add(AnswerData(
+      widget.resultData.answers.add(AnswerData(
         questionNumber: currentQuestionNumber++,
         displayedWord: currentWord,
         displayedColor: wordColor,
@@ -202,8 +197,7 @@ class _GamePageState extends State<GamePage> {
           incorrectAnswersToPass,
           widget.isCroatian,
           widget.isSecondRound,
-          widget.resultData,
-          answers,
+          widget.resultData
         ),
       ),
     );
