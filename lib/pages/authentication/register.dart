@@ -102,6 +102,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     try {
+      final trimmedEmail = emailController.text.trim();
+
       if (passwordController.text != confirmPasswordController.text) {
         if (context.mounted) {
           Navigator.pop(context);
@@ -111,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
+        email: trimmedEmail,
         password: passwordController.text,
       );
 

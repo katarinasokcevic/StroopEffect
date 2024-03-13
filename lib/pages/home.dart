@@ -124,10 +124,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildDialog(BuildContext context) {
-    bool isMobile = MediaQuery.of(context).size.height < 500;
-    double fontSize = isMobile ? 12 : 16;
-    double biggerSize = isMobile ? 16 : 20;
-
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -142,7 +138,7 @@ class _HomePageState extends State<HomePage> {
         textAlign: TextAlign.center,
         text: TextSpan(
           style: TextStyle(
-            fontSize: fontSize,
+            fontSize: 16,
             color: Colors.black,
           ),
           children: [
@@ -154,7 +150,7 @@ class _HomePageState extends State<HomePage> {
             TextSpan(
               text: "RED",
               style: TextStyle(
-                fontSize: biggerSize,
+                fontSize: 20,
                 color: Colors.blue,
                 fontWeight: FontWeight.bold,
               ),
