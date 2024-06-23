@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
-import '../../base_scaffold.dart';
+import 'package:stroop_effect/controllers/register_controller.dart';
+import 'base_scaffold.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key, required this.onTap});
+  const RegisterPage({Key? key, required this.onTap}) : super(key: key);
 
   final Function()? onTap;
 
@@ -14,6 +12,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final RegisterController _controller = RegisterController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -83,77 +82,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  void signUserUp() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-
-    try {
-      final trimmedEmail = emailController.text.trim();
-
-      if (passwordController.text != confirmPasswordController.text) {
-        if (context.mounted) {
-          Navigator.pop(context);
-          showErrorMessage("Passwords don't match");
-        }
-        return;
-      }
-
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: trimmedEmail,
-        password: passwordController.text,
-      );
-
-      if (context.mounted) {
-        Navigator.pop(context);
-      }
-    } on FirebaseAuthException catch (e) {
-      String message;
-      switch (e.code) {
-        case 'invalid-email':
-          message = "Invalid email";
-          break;
-        case 'weak-password':
-          message = "Weak password";
-          break;
-        default:
-          message = e.message ?? "An error occurred";
-      }
-
-      if (context.mounted) {
-        Navigator.pop(context);
-        showErrorMessage(message);
-      }
-    }
-  }
-
-  void showErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -206,9 +139,16 @@ class _RegisterPageState extends State<RegisterPage> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return _buildResponsiveContainer(
-          constraints.maxWidth,
+          MediaQuery.of(context).size.width,
           GestureDetector(
-            onTap: signUserUp,
+            onTap: () {
+              _controller.signUserUp(
+                emailController.text,
+                passwordController.text,
+                confirmPasswordController.text,
+                context,
+              );
+            },
             child: Container(
               padding: EdgeInsets.all(25),
               decoration: BoxDecoration(

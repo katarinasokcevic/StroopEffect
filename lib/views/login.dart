@@ -1,19 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:stroop_effect/base_scaffold.dart';
+import 'package:stroop_effect/controllers/login_controller.dart';
+import 'base_scaffold.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required this.onTap});
-
+class LoginPage extends StatelessWidget {
   final Function()? onTap;
+  final LoginController _controller = LoginController();
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
+  LoginPage({Key? key, required this.onTap}) : super(key: key);
 
-class _LoginPageState extends State<LoginPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +35,20 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 25),
               _buildTextField(
+                context: context,
                 controller: emailController,
                 hintText: 'Email',
                 obscureText: false,
               ),
               const SizedBox(height: 10),
               _buildTextField(
+                context: context,
                 controller: passwordController,
                 hintText: 'Password',
                 obscureText: true,
               ),
               const SizedBox(height: 35),
-              _buildSignInButton(),
+              _buildSignInButton(context),
               const SizedBox(height: 80),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -74,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
-                    onTap: widget.onTap,
+                    onTap: onTap,
                     child: const Text(
                       'Register now',
                       style: TextStyle(
@@ -92,55 +90,22 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void signUserIn() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-
-      if (context.mounted) {
-        Navigator.pop(context);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (context.mounted) {
-        Navigator.pop(context);
-      }
-      showErrorMessage(e.code);
-    }
-  }
-
-  void showErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildResponsiveContainer(double maxWidth, Widget child) {
+  Widget _buildResponsiveContainer(BuildContext context, double maxWidth,
+      Widget child) {
     double width = maxWidth;
-    if (MediaQuery.of(context).size.shortestSide < 600) {
+    if (MediaQuery
+        .of(context)
+        .size
+        .shortestSide < 600) {
       width *= 0.8;
-    } else if (MediaQuery.of(context).size.shortestSide >= 600 &&
-        MediaQuery.of(context).size.shortestSide < 1200) {
+    } else if (MediaQuery
+        .of(context)
+        .size
+        .shortestSide >= 600 &&
+        MediaQuery
+            .of(context)
+            .size
+            .shortestSide < 1200) {
       width *= 0.4;
     } else {
       width *= 0.15;
@@ -154,12 +119,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildTextField({
+    required BuildContext context,
     required TextEditingController controller,
     required String hintText,
     bool obscureText = false,
   }) {
     return _buildResponsiveContainer(
-      MediaQuery.of(context).size.width,
+      context,
+      MediaQuery
+          .of(context)
+          .size
+          .width,
       TextField(
         controller: controller,
         obscureText: obscureText,
@@ -179,11 +149,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildSignInButton() {
+
+  Widget _buildSignInButton(BuildContext context) {
     return _buildResponsiveContainer(
+      context,
       MediaQuery.of(context).size.width,
       GestureDetector(
-        onTap: signUserIn,
+        onTap: () {
+          _controller.signUserIn(
+            emailController.text,
+            passwordController.text,
+            context,
+          );
+        },
         child: Container(
           padding: const EdgeInsets.all(25),
           decoration: BoxDecoration(
@@ -204,4 +182,5 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
 }

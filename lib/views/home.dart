@@ -1,31 +1,10 @@
 import 'dart:math';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../base_scaffold.dart';
-import '../result_data.dart';
-import 'game.dart';
+import 'base_scaffold.dart';
+import '../controllers/home_controller.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int currentPage = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  final user = FirebaseAuth.instance.currentUser!;
-
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
-  }
+class HomePage extends StatelessWidget {
+  final HomeController controller = HomeController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +27,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Image.asset(
-                'assets/logo.png',
-                height: min(max(MediaQuery.of(context).size.height - 450, 50), 170)
+                  'assets/logo.png',
+                  height: min(max(MediaQuery.of(context).size.height - 450, 50), 170)
               ),
               Center(
                 child: Padding(
@@ -73,9 +52,9 @@ class _HomePageState extends State<HomePage> {
 
                         return Text(
                           "This application explores the Stroop effect, a cognitive phenomenon involving colors and words.\n"
-                          "The goal is to study user interactions, gain insights into cognitive\n"
-                          "processes, and understand cross-cultural influences on the Stroop effect.\n"
-                          "All data will be carefully recorded and shared to enhance our understanding of cognitive phenomena.",
+                              "The goal is to study user interactions, gain insights into cognitive\n"
+                              "processes, and understand cross-cultural influences on the Stroop effect.\n"
+                              "All data will be carefully recorded and shared to enhance our understanding of cognitive phenomena.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: fontSize,
@@ -144,7 +123,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             TextSpan(
               text:
-                  "The rules of the Stroop effect are very simple. Click on the rectangle with a color which represents meaning of the word, not the color of written word.\n"
+              "The rules of the Stroop effect are very simple. Click on the rectangle with a color which represents meaning of the word, not the color of written word.\n"
                   "For example, for the word, ",
             ),
             TextSpan(
@@ -165,7 +144,7 @@ class _HomePageState extends State<HomePage> {
       actions: [
         OutlinedButton(
           onPressed: () {
-            _showScreenshotPreviewDialog(context);
+            controller.showScreenshotPreviewDialog(context);
           },
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -187,7 +166,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             var isCroatian = Random().nextBool();
             Navigator.pop(context);
-            _showGameStartDialog(context, isCroatian);
+            controller.showGameStartDialog(context, isCroatian);
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
@@ -204,92 +183,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );
-  }
-
-  void _showGameStartDialog(BuildContext context, bool isCroatian) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          title: const Text('Game Start'),
-          content: Text(
-            'The game will start in ${isCroatian ? 'Croatian' : 'English'}.',
-            style: const TextStyle(fontSize: 16),
-          ),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.pink,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                var timestamp = DateFormat('ddHHmmss').format(DateTime.now());
-                var resultData = ResultData(user.uid, timestamp);
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GamePage(
-                      isCroatian: isCroatian,
-                      isSecondRound: false,
-                      resultData: resultData,
-                    ),
-                  ),
-                );
-              },
-              child: const Text(
-                'OK',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showScreenshotPreviewDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          title: const Text(
-            'Preview',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: Image.asset('assets/screenshot.jpg'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.pink,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Text(
-                'OK',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          ],
-        );
-      },
     );
   }
 }

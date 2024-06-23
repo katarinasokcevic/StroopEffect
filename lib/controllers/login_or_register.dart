@@ -1,5 +1,5 @@
-import 'package:stroop_effect/pages/authentication/login.dart';
-import 'package:stroop_effect/pages/authentication/register.dart';
+import 'package:stroop_effect/views/login.dart';
+import 'package:stroop_effect/views/register.dart';
 import 'package:flutter/material.dart';
 
 class LoginOrRegisterPage extends StatefulWidget {

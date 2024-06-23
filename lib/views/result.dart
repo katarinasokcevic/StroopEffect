@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:stroop_effect/color_map.dart';
-import 'package:stroop_effect/result_data.dart';
-import '../base_scaffold.dart';
+import 'base_scaffold.dart';
+import '../controllers/result_controller.dart';
+import '../models/result_data.dart';
 import 'game.dart';
 import 'leaderboard.dart';
 
@@ -13,13 +12,20 @@ class ResultPage extends StatelessWidget {
   final bool isCroatian;
   final bool bothLanguagesPlayed;
   final ResultData resultData;
+  final ResultController _controller = ResultController();
 
-  const ResultPage(this.timeTaken, this.correctAnswers, this.incorrectAnswers,
-      this.isCroatian, this.bothLanguagesPlayed, this.resultData, {super.key});
+   ResultPage(
+      this.timeTaken,
+      this.correctAnswers,
+      this.incorrectAnswers,
+      this.isCroatian,
+      this.bothLanguagesPlayed,
+      this.resultData, {
+        super.key,
+      });
 
   @override
   Widget build(BuildContext context) {
-    uploadUserResults(resultData, timeTaken, correctAnswers, isCroatian);
     return BaseScaffold(
       child: Center(
         child: Column(
@@ -34,17 +40,21 @@ class ResultPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Language: ${isCroatian ? 'Croatian' : 'English'}',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Text(
+                    'Language: ${isCroatian ? 'Croatian' : 'English'}',
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                  Text('Time taken: $timeTaken seconds',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Text(
+                    'Time taken: $timeTaken seconds',
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                  Text('Correct answers: $correctAnswers',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Text(
+                    'Correct answers: $correctAnswers',
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                  Text('Incorrect answers: $incorrectAnswers',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Text(
+                    'Incorrect answers: $incorrectAnswers',
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   const SizedBox(height: 16),
                   if (bothLanguagesPlayed)
@@ -69,7 +79,9 @@ class ResultPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => GamePage(
-                                  isCroatian: !isCroatian, isSecondRound: true, resultData: resultData)),
+                                  isCroatian: !isCroatian,
+                                  isSecondRound: true,
+                                  resultData: resultData)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -80,7 +92,8 @@ class ResultPage extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.all(25),
                       ),
-                      child: Text('Continue to ${isCroatian ? 'English' : 'Croatian'}'),
+                      child:
+                      Text('Continue to ${isCroatian ? 'English' : 'Croatian'}'),
                     ),
                 ],
               ),
@@ -133,7 +146,7 @@ class ResultPage extends StatelessWidget {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   resultData.name = _name;
-                  saveResult();
+                  _controller.saveResult(resultData);
 
                   if (context.mounted) {
                     Navigator.pushReplacement(
@@ -152,52 +165,4 @@ class ResultPage extends StatelessWidget {
       },
     );
   }
-
-  Future<void> uploadUserResults(ResultData resultData, double timeTaken,
-      int correctAnswers, bool isCroatian) async {
-    if (isCroatian) {
-      resultData.correctCroatian = correctAnswers;
-      resultData.timeCroatian = timeTaken;
-    } else {
-      resultData.correctEnglish = correctAnswers;
-      resultData.timeEnglish = timeTaken;
-    }
-  }
-
-  Future<void> saveResult() async {
-    var db = FirebaseFirestore.instance;
-    List<Map<String, dynamic>> answersData = resultData.answers.map((result) {
-      return {
-        'questionNumber': result.questionNumber,
-        'displayWord': result.displayedWord,
-        'displayedColor': colorToString(result.displayedColor),
-        'selectedColor': colorToString(result.selectedColor),
-        'isCroatian': result.isCroatian ? "croatian" : "english",
-        'isCorrect': result.isCorrect ? "correct" : "incorrect",
-        'timeTaken': result.timeTaken,
-      };
-    }).toList();
-
-    var dbData = <String, dynamic>{
-      'userId': resultData.userId,
-      'timestamp': resultData.timestamp,
-      'timeCroatian': resultData.timeCroatian,
-      'timeEnglish': resultData.timeEnglish,
-      'correctEnglish': resultData.correctEnglish,
-      'correctCroatian': resultData.correctCroatian,
-      'name': resultData.name,
-      'answers': answersData,
-
-    };
-    await db.collection("results").doc(resultData.timestamp).set(dbData);
-  }
-
-   String colorToString(Color color) {
-     for (var entry in wordColorMap.entries) {
-       if (entry.value == color) {
-         return entry.key;
-       }
-     }
-     return '';
-   }
 }

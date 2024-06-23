@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:stroop_effect/pages/home.dart';
-import 'authentication/auth.dart';
+import '../controllers/auth.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

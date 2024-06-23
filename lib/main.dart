@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:stroop_effect/pages/splash_screen.dart';
-import 'base_scaffold.dart';
+import 'package:stroop_effect/views/splash_screen.dart';
+import 'views/base_scaffold.dart';
 import 'firebase_options.dart';
 
 void main() async {
