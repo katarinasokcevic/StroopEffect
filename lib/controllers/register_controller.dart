@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../models/register_model.dart';
 
 class RegisterController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final RegisterModel _model = RegisterModel();
 
   Future<void> signUserUp(String email, String password, String confirmPassword, BuildContext context) async {
     showDialog(
@@ -15,16 +15,11 @@ class RegisterController {
     );
 
     try {
-      final trimmedEmail = email.trim();
-
       if (password != confirmPassword) {
         throw Exception("Passwords don't match");
       }
 
-      await _auth.createUserWithEmailAndPassword(
-        email: trimmedEmail,
-        password: password,
-      );
+      await _model.signUp(email, password);
 
       if (Navigator.canPop(context)) {
         Navigator.pop(context);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/leaderboard_controller.dart';
+import '../models/leaderboard_data.dart';
 import 'base_scaffold.dart';
-import '../models/leaderboard_model.dart';
 import 'home.dart';
 
 class LeaderboardPage extends StatelessWidget {
